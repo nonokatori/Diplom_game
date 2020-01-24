@@ -1,4 +1,4 @@
-package ttclogic;
+package tttclogic;
 
 import java.util.Scanner;
 

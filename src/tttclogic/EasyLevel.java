@@ -1,12 +1,12 @@
-package ttclogic;
+package tttclogic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
+import static tttclogic.TypeGame.*;
 
 public class EasyLevel {
 
-    Scanner scan = new Scanner(System.in);
 
     int len;
     char [][] arrField;
@@ -18,8 +18,7 @@ public class EasyLevel {
 
     char [] field = new char[9];
     char letterOur, letterEnemy;
-    ArrayList<Integer> availSpots = new ArrayList<>();
-    ArrayList <Integer> moveRes = new ArrayList<>();
+
 
     String [] level = {
             "easy",
@@ -40,24 +39,19 @@ public class EasyLevel {
 
     }
 
-    public void LvlSelect(String _letter, char _let) {
+    public void lvlSelect(Enum type, char _let) {
 
         let = _let;
-        System.out.println ("Making move level " + _letter);
+        System.out.println ("Making move level " + type);
 
-        String state = _letter;
 
-        switch (state) {
-            case "easy":
-                RandomMove();
-                break;
-            case "medium":
-                if (!MediumLevelMove())
-                    RandomMove();
-                break;
-            case "hard":
-                Letter(_let);
-                break;
+        if (EASY.equals(type)) {
+            randomMove();
+        } else if (MIDDLE.equals(type)) {
+            if (!MediumLevelMove())
+                randomMove();
+        } else if (HARD.equals(type)) {
+            letter(_let);
         }
     }
 
@@ -161,7 +155,7 @@ public class EasyLevel {
     }
 
 
-    private void RandomMove() {
+    private void randomMove() {
 
         int max = 0;
         int min = 0;
@@ -189,16 +183,16 @@ public class EasyLevel {
     }
 
 
-    private void Letter (char _letter) {
+    private void letter (char _letter) {
         letterOur = _letter;
 
         letterEnemy = letterOur == 'X' ? 'O' : 'X';
-        int[] let = MethodMinimax(2,letterOur, arrField);
+        int[] let = methodMinimax(2,letterOur, arrField);
 
         arrField[let[1]][let[2]] = _letter;
     }
 
-    private int[] MethodMinimax (int _depth, char _player, char[][] _newField) {
+    private int[] methodMinimax (int _depth, char _player, char[][] _newField) {
         List<int[]> nextMoves = generateMoves();
 
         int bestScore = (_player == letterOur) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -213,14 +207,14 @@ public class EasyLevel {
                 // Try this move for the current "player"
                 _newField[move[0]][move[1]] = _player;
                 if (_player == letterOur) {  // mySeed (computer) is maximizing player
-                    currentScore = MethodMinimax(_depth - 1, letterEnemy,_newField)[0];
+                    currentScore = methodMinimax(_depth - 1, letterEnemy,_newField)[0];
                     if (currentScore > bestScore) {
                         bestScore = currentScore;
                         bestRow = move[0];
                         bestCol = move[1];
                     }
                 } else {  // oppSeed is minimizing player
-                    currentScore = MethodMinimax(_depth - 1, letterOur, _newField)[0];
+                    currentScore = methodMinimax(_depth - 1, letterOur, _newField)[0];
                     if (currentScore < bestScore) {
                         bestScore = currentScore;
                         bestRow = move[0];

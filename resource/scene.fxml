@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="265.0" prefWidth="166.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="241.0" VBox.vgrow="ALWAYS">
+            <children>
+                <GridPane fx:id="table" accessibleRole="INCREMENT_BUTTON" gridLinesVisible="true" layoutX="52.0" layoutY="88.0" opacity="0.59" prefHeight="137.0" prefWidth="137.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" percentWidth="0.0" prefWidth="45.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" percentWidth="0.0" prefWidth="45.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" percentWidth="0.0" prefWidth="45.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="45.0" minHeight="45.0" percentHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="45.0" percentHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="45.0" percentHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <effect>
+                        <Blend />
+                    </effect>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <children>
+                        <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton12" prefHeight="45.0" prefWidth="45.0" text="b12" GridPane.columnIndex="1" />
+                        <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton11" prefHeight="45.0" prefWidth="45.0" text="b11" />
+                        <Button fx:id="btn13" mnemonicParsing="false" onAction="#clickedButton13" prefHeight="45.0" prefWidth="45.0" text="b13" GridPane.columnIndex="2" />
+                        <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton21" prefHeight="45.0" prefWidth="45.0" text="b21" GridPane.rowIndex="1" />
+                        <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton22" prefHeight="45.0" prefWidth="45.0" text="b22" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="btn23" mnemonicParsing="false" onAction="#clickedButton23" prefHeight="45.0" prefWidth="45.0" text="b23" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="btn31" mnemonicParsing="false" onAction="#clickedButton31" prefHeight="45.0" prefWidth="45.0" text="b31" GridPane.rowIndex="2" />
+                        <Button fx:id="btn32" mnemonicParsing="false" onAction="#clickedButton32" prefHeight="45.0" prefWidth="45.0" text="b32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="btn33" mnemonicParsing="false" onAction="#clickedButton33" prefHeight="45.0" prefWidth="45.0" text="b33" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    </children>
+                </GridPane>
+                <RadioButton fx:id="rbOnline" layoutX="77.0" layoutY="161.0" mnemonicParsing="false" text="Online" />
+                <RadioButton fx:id="rbOffline" layoutX="77.0" layoutY="196.0" mnemonicParsing="false" text="Offline" />
+                <Text fx:id="type" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите тип игры" />
+                <RadioButton fx:id="bot" layoutX="78.0" layoutY="161.0" mnemonicParsing="false" text="Игра с ботом" />
+                <RadioButton fx:id="player" layoutX="78.0" layoutY="196.0" mnemonicParsing="false" text="Игра с противником" />
+                <Text fx:id="fstPlayer" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 1 игрока" />
+                <RadioButton fx:id="easy" layoutX="78.0" layoutY="161.0" mnemonicParsing="false" onAction="#clickedEasy" text="Легкий" />
+                <RadioButton fx:id="middle" layoutX="78.0" layoutY="196.0" mnemonicParsing="false" onAction="#clickedMiddle" text="Сложный" />
+                <Text fx:id="levleGame" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
+                <RadioButton fx:id="hard" layoutX="78.0" layoutY="230.0" mnemonicParsing="false" onAction="#clickedHard" text="Сложный" />
+                <Label fx:id="going" layoutX="60.0" layoutY="277.0" text="Label" />
+                <Text fx:id="sndPlayer" layoutX="74.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 2 игрока" />
+                <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="25.0" prefWidth="242.0">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="Игра">
+                            <items>
+                                <MenuItem fx:id="newGame" mnemonicParsing="false" text="Новая игра" onAction="#clickedNG" />
+                                <MenuItem fx:id="endGame" mnemonicParsing="false" text="Закончить игру " onAction="#clickedEG" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

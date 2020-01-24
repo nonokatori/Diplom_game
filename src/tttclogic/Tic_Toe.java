@@ -1,13 +1,21 @@
-package ttclogic;
+package tttclogic;
 
 import java.util.Scanner;
-
-import static java.lang.Character.toUpperCase;
 
 
 public class Tic_Toe {
 
-    String cell;
+
+    private Enum player1;
+    private Enum player2;
+
+    public void setPlayer1(Enum player1) {
+        this.player1 = player1;
+    }
+
+    public void setPlayer2(Enum player2) {
+        this.player2 = player2;
+    }
 
     int lengthArr = 3;
     char [][] arrField = new char[lengthArr][lengthArr];
@@ -62,8 +70,6 @@ public class Tic_Toe {
             }
         }
 
-        pl1 = word[1];
-        pl2 = word[2];
 
         enter.PrintTicTac();
 
@@ -75,13 +81,13 @@ public class Tic_Toe {
 
             switch (state) {
                 case "_letter1":
-                    nextMove(pl1, letter);
+                    nextMove(player1, letter);
                     state = "print";
                     letter = 'O';
                     break;
 
                 case  "_letter2":
-                    nextMove(pl2, letter);
+                    nextMove(player2, letter);
                     state = "print";
                     letter = 'X';
                     break;
@@ -100,35 +106,13 @@ public class Tic_Toe {
 
             }//switch (state)
         }//while (state!=4)*/
-
     }
 
-    private void nextMove(String __letter, char _letter) {
-        if ( __letter.equals("user")) enter.Coordinates(_letter);
-        else easyLevel.LvlSelect(__letter, _letter);
+    private void nextMove(Enum type, char _letter) {
+        if (TypeGame.USER.equals(type)) enter.Coordinates(_letter);
+        else easyLevel.lvlSelect(type, _letter);
 
     }
-
-
-    private void CheckLength() {
-        if (cell.length() != lengthArr*lengthArr) {
-            System.out.println("Bad length");
-            System.exit(0);
-        }
-    }
-
-    private void CheckSymbols() {
-
-        for (int i = 0; i < lengthArr; i++)
-            for(int j = 0; j < lengthArr; j++)
-            {
-                arrField[j][i] = toUpperCase(arrField[j][i]);         // перевести символы в верний регистр
-                if (arrField[j][i] != 'X' && arrField[j][i] != ' ' && arrField[j][i] != 'O')
-                {
-                    System.out.println("Bad char " + arrField[j][i]);
-                    System.exit(0);
-                }
-            }
-    }
-
 }
+
+
