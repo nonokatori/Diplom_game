@@ -56,7 +56,7 @@
                 <Text fx:id="fstPlayer" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 1 игрока" />
                 <RadioButton fx:id="easy" layoutX="78.0" layoutY="161.0" mnemonicParsing="false" onAction="#clickedEasy" text="Легкий" />
                 <RadioButton fx:id="middle" layoutX="78.0" layoutY="196.0" mnemonicParsing="false" onAction="#clickedMiddle" text="Сложный" />
-                <Text fx:id="levleGame" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
+                <Text fx:id="levelGame" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
                 <RadioButton fx:id="hard" layoutX="78.0" layoutY="230.0" mnemonicParsing="false" onAction="#clickedHard" text="Сложный" />
                 <Label fx:id="going" layoutX="60.0" layoutY="277.0" text="Label" />
                 <Text fx:id="sndPlayer" layoutX="74.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 2 игрока" />

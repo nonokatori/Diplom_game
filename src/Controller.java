@@ -15,10 +15,15 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     @FXML GridPane table;
     @FXML Button btn11,btn12,btn13,btn21,btn22,btn23,btn31,btn32,btn33;
-    @FXML RadioButton bot, easy, middle, hard, rbOnline, rbOffline;
+    @FXML RadioButton bot, player, easy, middle, hard, rbOnline, rbOffline;
     @FXML Text fstPlayer, sndPlayer, type, levelGame;
     @FXML Label going;
     @FXML MenuItem newGame;
+
+    Button [] buttons = {btn11,btn12,btn13,btn21,btn22,btn23,btn31,btn32,btn33};
+    RadioButton [] rbLevel = {easy, middle, hard};
+    RadioButton [] rbNet = {rbOnline, rbOffline};
+    RadioButton [] rbType = {bot, player};
 
     Tic_Toe ticToe = new Tic_Toe();
 
