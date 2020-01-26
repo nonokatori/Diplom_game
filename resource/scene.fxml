@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -19,7 +18,7 @@
     <children>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="241.0" VBox.vgrow="ALWAYS">
             <children>
-                <GridPane fx:id="table" accessibleRole="INCREMENT_BUTTON" gridLinesVisible="true" layoutX="52.0" layoutY="88.0" opacity="0.59" prefHeight="137.0" prefWidth="137.0">
+                <GridPane fx:id="table" accessibleRole="INCREMENT_BUTTON" gridLinesVisible="true" layoutX="52.0" layoutY="88.0" opacity="0.59" prefHeight="137.0" prefWidth="137.0" visible="false">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" percentWidth="0.0" prefWidth="45.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" percentWidth="0.0" prefWidth="45.0" />
@@ -37,39 +36,79 @@
                         <Insets />
                     </opaqueInsets>
                     <children>
-                        <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton12" prefHeight="45.0" prefWidth="45.0" text="b12" GridPane.columnIndex="1" />
-                        <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton11" prefHeight="45.0" prefWidth="45.0" text="b11" />
-                        <Button fx:id="btn13" mnemonicParsing="false" onAction="#clickedButton13" prefHeight="45.0" prefWidth="45.0" text="b13" GridPane.columnIndex="2" />
-                        <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton21" prefHeight="45.0" prefWidth="45.0" text="b21" GridPane.rowIndex="1" />
-                        <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton22" prefHeight="45.0" prefWidth="45.0" text="b22" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="btn23" mnemonicParsing="false" onAction="#clickedButton23" prefHeight="45.0" prefWidth="45.0" text="b23" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Button fx:id="btn31" mnemonicParsing="false" onAction="#clickedButton31" prefHeight="45.0" prefWidth="45.0" text="b31" GridPane.rowIndex="2" />
-                        <Button fx:id="btn32" mnemonicParsing="false" onAction="#clickedButton32" prefHeight="45.0" prefWidth="45.0" text="b32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="btn33" mnemonicParsing="false" onAction="#clickedButton33" prefHeight="45.0" prefWidth="45.0" text="b33" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Button fx:id="btn01" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b12" GridPane.columnIndex="1" />
+                        <Button fx:id="btn00" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b11" />
+                        <Button fx:id="btn02" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b13" GridPane.columnIndex="2" />
+                        <Button fx:id="btn10" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b21" GridPane.rowIndex="1" />
+                        <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b22" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b23" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="btn20" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b31" GridPane.rowIndex="2" />
+                        <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b33" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
-                <RadioButton fx:id="rbOnline" layoutX="77.0" layoutY="161.0" mnemonicParsing="false" text="Online" />
-                <RadioButton fx:id="rbOffline" layoutX="77.0" layoutY="196.0" mnemonicParsing="false" text="Offline" />
-                <Text fx:id="type" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите тип игры" />
-                <RadioButton fx:id="bot" layoutX="78.0" layoutY="161.0" mnemonicParsing="false" text="Игра с ботом" />
-                <RadioButton fx:id="player" layoutX="78.0" layoutY="196.0" mnemonicParsing="false" text="Игра с противником" />
-                <Text fx:id="fstPlayer" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 1 игрока" />
-                <RadioButton fx:id="easy" layoutX="78.0" layoutY="161.0" mnemonicParsing="false" onAction="#clickedEasy" text="Легкий" />
-                <RadioButton fx:id="middle" layoutX="78.0" layoutY="196.0" mnemonicParsing="false" onAction="#clickedMiddle" text="Сложный" />
-                <Text fx:id="levelGame" layoutX="64.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
-                <RadioButton fx:id="hard" layoutX="78.0" layoutY="230.0" mnemonicParsing="false" onAction="#clickedHard" text="Сложный" />
-                <Label fx:id="going" layoutX="60.0" layoutY="277.0" text="Label" />
-                <Text fx:id="sndPlayer" layoutX="74.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 2 игрока" />
+                <Label fx:id="going" layoutX="60.0" layoutY="277.0" text="Label" visible="false" />
                 <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="25.0" prefWidth="242.0">
                     <menus>
                         <Menu mnemonicParsing="false" text="Игра">
                             <items>
-                                <MenuItem fx:id="newGame" mnemonicParsing="false" text="Новая игра" onAction="#clickedNG" />
-                                <MenuItem fx:id="endGame" mnemonicParsing="false" text="Закончить игру " onAction="#clickedEG" />
+                                <MenuItem fx:id="newGame" disable="true" mnemonicParsing="false" onAction="#clickedNG" text="Новая игра" />
+                                <MenuItem fx:id="endGame" disable="true" mnemonicParsing="false" onAction="#clickedEG" text="Закончить игру " />
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
+            <GridPane fx:id="gpType" layoutX="57.0" layoutY="108.0" prefHeight="122.0" prefWidth="126.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="26.4" minHeight="10.0" prefHeight="15.199987792968749" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="45.60001220703124" minHeight="10.0" prefHeight="45.60001220703124" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btOff" mnemonicParsing="false" onAction="#clickedBtOff" prefHeight="26.0" prefWidth="95.0" text="Offline" GridPane.rowIndex="3" />
+                  <Button fx:id="btOn"  mnemonicParsing="false" onAction="#clickedBtOn" prefHeight="26.0" prefWidth="95.0" text="Online" GridPane.rowIndex="2" />
+                      <Text fx:id="type" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите тип игры" />
+               </children>
+            </GridPane>
+            <GridPane fx:id="gpPlayer" layoutX="57.0" layoutY="108.0" prefHeight="122.0" prefWidth="126.0" visible="false">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="26.4" minHeight="10.0" prefHeight="15.199987792968749" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="45.60001220703124" minHeight="10.0" prefHeight="45.60001220703124" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                      <Text fx:id="sndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 2 игрока" visible="false" />
+                      <Text fx:id="fstPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="Выберите 1 игрока" />
+                  <Button fx:id="btAI" prefHeight="26.0" prefWidth="95.0" mnemonicParsing="false" onAction="#clickedBtAi" text="С ботом" GridPane.rowIndex="2" />
+                  <Button fx:id="btPlayer" mnemonicParsing="false" onAction="#clickedBtPlayer" prefHeight="26.0" prefWidth="95.0" text="С другом" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+            <GridPane fx:id="gpLevel" layoutX="57.0" layoutY="105.0" prefHeight="168.0" prefWidth="126.0" visible="false">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="26.4" minHeight="10.0" prefHeight="15.199987792968749" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="45.60001220703124" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="38.999975585937506" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="42.20001831054687" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                      <Text fx:id="levelGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
+                  <Button fx:id="btEasy" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedBtEasy" prefHeight="26.0" prefWidth="95.0" text="Легкий" GridPane.rowIndex="2" />
+                  <Button fx:id="btMid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedBtMid" prefHeight="26.0" prefWidth="95.0" text="Средний" GridPane.rowIndex="3" />
+                  <Button fx:id="btHard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedHard" prefHeight="26.0" prefWidth="95.0" text="Сложный" GridPane.rowIndex="4" />
+               </children>
+            </GridPane>
             </children>
         </AnchorPane>
     </children>

@@ -6,6 +6,14 @@ import java.util.Scanner;
 public class Tic_Toe {
 
 
+    public Enum getPlayer1() {
+        return player1;
+    }
+
+    public Enum getPlayer2() {
+        return player2;
+    }
+
     private Enum player1;
     private Enum player2;
 
@@ -113,6 +121,8 @@ public class Tic_Toe {
         else easyLevel.lvlSelect(type, _letter);
 
     }
+
+
 }
 
 
