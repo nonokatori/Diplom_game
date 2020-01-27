@@ -98,24 +98,5 @@ public class EnterCoord {
         return true;
     }
 
-    public void PrintTicTac () {
-
-        int n = 0;
-
-        System.out.println("---------");
-        for (int j = n; j <len; j++)
-        {
-            System.out.print("| ");
-            for (int i = 0; i <len; i++)
-            {
-                System.out.print(arrField[j][i] + " ");
-            }
-            System.out.println("|");
-        }
-
-        System.out.println("---------");
-
-    }
-
 
 }

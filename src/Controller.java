@@ -4,7 +4,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import tttclogic.Tic_Toe;
@@ -16,55 +15,61 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    @FXML GridPane table, gpType, gpPlayer, gpLevel;
-    @FXML Button btn00,btn01,btn02,btn10,btn11,btn12,btn20,btn21,btn22;
-    @FXML Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
-    @FXML Text fstPlayer, sndPlayer, type, levelGame;
-    @FXML Label going;
-    @FXML MenuItem newGame, endGame;
+    @FXML private GridPane table, gpType, gpPlayer, gpLevel;
+    @FXML private Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
+    @FXML private Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
+    @FXML private Text fstPlayer, sndPlayer, type, levelGame;
+    @FXML private Label going;
+    @FXML private MenuItem newGame, endGame;
 
-    Button [] buttons = {btn00,btn01,btn02,btn10,btn11,btn12,btn20,btn21,btn22};
-    Map<TypeGame, Button> btLevel = new HashMap<>();
-    Button [] btNet = {btOn, btOff};
-    Button [] btType = {btAI, btPlayer};
+    Button[] buttons;
+    Map<Button, TypeGame> btLevel = new HashMap<>();
 
     Tic_Toe ticToe = new Tic_Toe();
-    private Controller() {
-        btLevel.put(TypeGame.EASY,btEasy);
-        btLevel.put(TypeGame.MIDDLE,btMid);
-        btLevel.put(TypeGame.HARD,btHard);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        btLevel.put(btEasy, TypeGame.EASY);
+        btLevel.put(btMid, TypeGame.MIDDLE);
+        btLevel.put(btHard, TypeGame.HARD);
+        buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
 
     }
-    
-    public void clickedBtLvl(ActionEvent actionEvent) {
 
-        for (Button btn: btLevel.values()) {
-            if(btn.getId().equals(actionEvent.))
+    public void clickedBtLvl(ActionEvent actionEvent) {
+        Enum type = null;
+        Button button = (Button) actionEvent.getSource();
+        for (Button btn : btLevel.keySet()) {
+            if (btn.getId().equals(button.getId())) {
+                type = btLevel.get(btn);
+                break;
+            }
         }
-        if(ticToe.getPlayer1()!=null) {
-            gpPlayer.setVisible(false);
+        if (ticToe.getPlayer1() != null) {
+            gpLevel.setVisible(false);
             table.setVisible(true);
-            ticToe.setPlayer2(TypeGame.USER);
-        }
-        else {
+            ticToe.setPlayer2(type);
+            endGame.setDisable(false);
+            newGame.setDisable(false);
+        } else {
+            gpPlayer.setVisible(true);
+            gpLevel.setVisible(false);
             fstPlayer.setVisible(false);
             sndPlayer.setVisible(true);
-            ticToe.setPlayer1(TypeGame.USER);
+            ticToe.setPlayer1(type);
         }
     }
 
     public void clickedNG(ActionEvent actionEvent) {
         table.setVisible(false);
-        for (Button bt: buttons) {
+        for (Button bt : buttons)
             bt.setText("");
-        }
+
         gpType.setVisible(true);
         ticToe.setPlayer1(null);
         ticToe.setPlayer2(null);
+        newGame.setDisable(true);
+        endGame.setDisable(true);
     }
 
     public void clickedEG(ActionEvent actionEvent) {
@@ -77,12 +82,13 @@ public class Controller implements Initializable {
     }
 
     public void clickedBtPlayer(ActionEvent actionEvent) {
-        if(ticToe.getPlayer1()!=null) {
+        if (ticToe.getPlayer1() != null) {
             gpPlayer.setVisible(false);
             table.setVisible(true);
             ticToe.setPlayer2(TypeGame.USER);
-        }
-        else {
+            newGame.setDisable(false);
+            endGame.setDisable(false);
+        } else {
             fstPlayer.setVisible(false);
             sndPlayer.setVisible(true);
             ticToe.setPlayer1(TypeGame.USER);
@@ -102,5 +108,10 @@ public class Controller implements Initializable {
     }
 
     public void clickedButton(ActionEvent actionEvent) {
+
+        Button clickedBtn = (Button) actionEvent.getSource();
+        clickedBtn.getId();
+
     }
 }
+

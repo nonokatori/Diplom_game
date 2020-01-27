@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="265.0" prefWidth="166.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<VBox prefHeight="265.0" prefWidth="166.0" xmlns="http://javafx.com/javafx/13.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <children>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="241.0" VBox.vgrow="ALWAYS">
             <children>
@@ -36,15 +36,15 @@
                         <Insets />
                     </opaqueInsets>
                     <children>
-                        <Button fx:id="btn01" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b12" GridPane.columnIndex="1" />
-                        <Button fx:id="btn00" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b11" />
-                        <Button fx:id="btn02" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b13" GridPane.columnIndex="2" />
-                        <Button fx:id="btn10" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b21" GridPane.rowIndex="1" />
-                        <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b22" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b23" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Button fx:id="btn20" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b31" GridPane.rowIndex="2" />
-                        <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="b33" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Button fx:id="btn01" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" />
+                        <Button fx:id="btn00" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" />
+                        <Button fx:id="btn02" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" />
+                        <Button fx:id="btn10" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.rowIndex="1" />
+                        <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="btn20" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.rowIndex="2" />
+                        <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
                 <Label fx:id="going" layoutX="60.0" layoutY="277.0" text="Label" visible="false" />
@@ -104,9 +104,9 @@
                </rowConstraints>
                <children>
                       <Text fx:id="levelGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Уровень сложности" />
-                  <Button fx:id="btEasy" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedBtEasy" prefHeight="26.0" prefWidth="95.0" text="Легкий" GridPane.rowIndex="2" />
-                  <Button fx:id="btMid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedBtMid" prefHeight="26.0" prefWidth="95.0" text="Средний" GridPane.rowIndex="3" />
-                  <Button fx:id="btHard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickedHard" prefHeight="26.0" prefWidth="95.0" text="Сложный" GridPane.rowIndex="4" />
+                  <Button fx:id="btEasy" mnemonicParsing="false" onAction="#clickedBtLvl" prefHeight="26.0" prefWidth="95.0" text="Легкий" GridPane.rowIndex="2" />
+                  <Button fx:id="btMid" mnemonicParsing="false" onAction="#clickedBtLvl" prefHeight="26.0" prefWidth="95.0" text="Средний" GridPane.rowIndex="3" />
+                  <Button fx:id="btHard" mnemonicParsing="false" onAction="#clickedBtLvl" prefHeight="26.0" prefWidth="95.0" text="Сложный" GridPane.rowIndex="4" />
                </children>
             </GridPane>
             </children>

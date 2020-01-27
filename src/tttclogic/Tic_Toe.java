@@ -36,50 +36,19 @@ public class Tic_Toe {
 
     public Tic_Toe()
     {
-        for (int i = 0; i < lengthArr; i++)
-            for (int j = 0; j < lengthArr; j++)
-            {
-                arrField[i][j] = ' ';
-            }// check.SetArrayAndLength(arrField, lengthArr);*/
+        for (int i=0,j = 0; i < lengthArr; i++, j++)
+            arrField[i][j] = ' ';
     }
 
     public void TicTacToe_Game () {
 
-
         String stEx;
         String st;
 
-        String pl1, pl2;
         String [] word = new String[3];
 
 
         st = "read";
-
-        while (!st.equals("further")) {
-            switch (st) {
-                case "read":
-                    System.out.print("Input command: ");
-                    stEx = scanner.nextLine();
-                    word = stEx.split("\\s");
-                    st = word[0];
-                    break;
-
-                case "exit":
-                    System.exit(0);
-                    break;
-
-                case "start":
-                    if (word.length < 3) {
-                        System.out.println("Bad parameters!");
-                        st = "read";
-                        break;
-                    }
-                    else st = "further";
-            }
-        }
-
-
-        enter.PrintTicTac();
 
         String state = "_letter1";
         char letter = 'X';
