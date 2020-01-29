@@ -8,16 +8,12 @@ import static tttclogic.TypeGame.*;
 public class EasyLevel {
 
 
-    int len;
-    char [][] arrField;
-    char let;
+    private int len;
+    private char [][] arrField;
+    private char let;
 
-    int score = 0;
-    int bestScore;
-    int bestMove = 0;
-
-    char [] field = new char[9];
-    char letterOur, letterEnemy;
+    private char [] field = new char[9];
+    private char letterOur, letterEnemy;
 
 
     String [] level = {
@@ -26,13 +22,13 @@ public class EasyLevel {
             "hard"
     };
 
-    public EasyLevel (char [][] _arr, int _n) {
-        len = _n;
+    public EasyLevel (char [][] _arr) {
+        len = 3;
         arrField = _arr;
 
         int  n = 0;
-        for (int i = 0; i < _n; i++)
-            for (int j = 0; j < _n; j++){
+        for (int i = 0; i < len; i++)
+            for (int j = 0; j < len; j++){
                 field[n]  = _arr [i][j];
                 n++;
             }

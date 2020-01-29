@@ -1,70 +1,41 @@
 package tttclogic;
 
-
 public class CheckField {
 
-    int length;
-    char[][] fieldArr;
+    private int length = 3;
+    private char[][] fieldArr;
+    private char letter;
 
-    private char[] winChar;
-    private char[] winCharGor;
-    private char[] winCharVer;
+    private char[] winChar = new char[4];
+    private char[] winCharGor = new char[length];
+    private char[] winCharVer = new char[length];
     private char winCharDiagPl;
     private char winCharDiagMin;
 
-    private boolean[] winnerArr;
-    private boolean[] winnerArrGor;
-    private boolean[] winnerArrVer;
+    private boolean[] winnerArr = new boolean[4];
+    private boolean[] winnerArrGor = new boolean[length];
+    private boolean[] winnerArrVer = new boolean[length];
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
 
-    private boolean[] impArr;
-
-    public CheckField(char[][] _arr, int _len) {
-
-        length = _len;
+    public CheckField(char[][] _arr) {
         fieldArr = _arr;
-
-        winChar = new char[4];
-        winCharGor = new char[length];
-        winCharVer = new char[length];
-        winnerArr = new boolean[4];
-        winnerArrGor = new boolean[length];
-        winnerArrVer = new boolean[length];
-        impArr = new boolean[4];
     }
 
 
-    public boolean Field() {
+    public GameState field(char letter) {
 
-        int state = 0;
-        boolean win = false;
+        this.letter = letter;
 
-
-        switch (state) {
-            case 0:
-                if (ImpossibilityTest()) {
-                    win = true;
-                    break;
-                }
-
-            case 1:
-                if (WinnerSelection()) {
-                    win = true;
-                    break;
-                }
-
-            case 2:
-                if (DrawNewField()) {
-                    win = true;
-                    break;
-                }
-        }
-        return win;
-    } // проверяет поле на жизнеспособность
+        if (winnerSelection())
+            return GameState.WIN;
+        else if (drawNewField())
+            return GameState.DRAW;
+        return null;
+    }
 
 
-    private boolean DrawNewField() {        // "Draw" - when no side has a three in a arrField and the field has no empty cells;
+    private boolean drawNewField() {
 
         boolean flag;
         boolean flagFin = false;
@@ -79,24 +50,21 @@ public class CheckField {
 
         if (coun == length * length) {
             System.out.println("Draw new field.");
-            flagFin = true; //флаг, что поле перерисовываем
+            flagFin = true;
         }
 
         return flagFin;
     } //заполнено ли поле
 
 
-    private boolean WinnerSelection() {
-        // "Impossible" - when the field has three X in a arrField as well as three O in a arrField. Or the field has a lot more X's that O's or vice versa (if the difference is 2 or more, should be 1 or 0).*/
-
-
+    private boolean winnerSelection() {
         boolean stateFlag = false;
 
-        GorVerWinner();
-        DiagWinner();
+        gorVerWinner();
+        diagWinner();
 
-        WinnerFind(winnerArrVer, winCharVer, 0);
-        WinnerFind(winnerArrGor, winCharGor, 1);
+        winnerFind(winnerArrVer, winCharVer, 0);
+        winnerFind(winnerArrGor, winCharGor, 1);
         winnerArr[2] = winnerArrDiagPl;
         winnerArr[3] = winnerArrDiagMin;
 
@@ -114,45 +82,7 @@ public class CheckField {
         return stateFlag;
     }
 
-    private boolean ImpossibilityTest() {
-
-        boolean flagImpos,
-                flagFin = false;
-
-        int countX = 0,
-                countO = 0;
-
-        for (int j = 0; j < length; j++)
-            for (int k = 0; k < length; k++) {
-                if (fieldArr[k][j] == 'X') countX++;
-                if (fieldArr[k][j] == 'O') countO++;
-            }
-
-        flagImpos = ((countX - countO) > 1) || ((countO - countX) > 1);
-
-        GorVerWinner();
-        DiagWinner();
-
-        impArr[0] = TestArr(winnerArrGor);
-        impArr[1] = TestArr(winnerArrVer);
-        impArr[2] = winnerArrDiagMin;
-        impArr[3] = winnerArrDiagPl;
-
-        for (int i = 1; i < impArr.length; i++) { // переписать
-            if ((impArr[i - 1] == true) && impArr[i - 1] == impArr[i]) {
-                flagFin = true;
-                break;
-            } else impArr[i] = impArr[i - 1];
-        }
-
-
-        if (flagImpos == true || flagFin == true) System.out.println("Impossible");
-
-
-        return flagFin = flagFin || flagImpos;
-    }
-
-    private void WinnerFind(boolean[] _arr, char[] _char, int _n) {
+    private void winnerFind(boolean[] _arr, char[] _char, int _n) {
 
         for (int i = 0; i < _arr.length; i++) {// выставляем флаг, что победитель найден
             if (_arr[i] == true) {
@@ -163,11 +93,12 @@ public class CheckField {
         }
     }
 
+    private void diagWinner() {
 
-    private void DiagWinner() {
-
-        winnerArrDiagPl = (fieldArr[0][0] == fieldArr[1][1]) && (fieldArr[1][1] == fieldArr[2][2]) && ((fieldArr[1][1] == 'X') || (fieldArr[1][1] == 'O')); // диагональ положительная
-        winnerArrDiagMin = (fieldArr[2][0] == fieldArr[1][1]) && (fieldArr[1][1] == fieldArr[0][2]) && ((fieldArr[1][1] == 'X') || (fieldArr[1][1] == 'O')); //диагональ отрицательная
+        winnerArrDiagPl = (fieldArr[0][0] == fieldArr[1][1]) &&
+                (fieldArr[1][1] == fieldArr[2][2]) && (fieldArr[1][1] == letter); // диагональ положительная
+        winnerArrDiagMin = (fieldArr[2][0] == fieldArr[1][1]) &&
+                (fieldArr[1][1] == fieldArr[0][2]) && (fieldArr[1][1] == letter); //диагональ отрицательная
 
         if (winnerArrDiagMin)
             winCharDiagMin = fieldArr[1][1];   //winDiagMinCh,
@@ -175,16 +106,16 @@ public class CheckField {
 
     }
 
-    private void GorVerWinner() {
+    private void gorVerWinner() {
 
         for (int j = 0; j < length; j++)
             for (int i = 1; i < length - 1; i++) {
 
                 winnerArrGor[j] = (fieldArr[j][i - 1] == fieldArr[j][i])
-                        && (fieldArr[j][i] == fieldArr[j][i + 1]) && ((fieldArr[j][i] == 'X') || (fieldArr[j][i] == 'O')); // gor
+                        && (fieldArr[j][i] == fieldArr[j][i + 1]) && (fieldArr[j][i] == letter); // gor
 
                 winnerArrVer[j] = (fieldArr[i - 1][j] == fieldArr[i][j])
-                        && (fieldArr[i][j] == fieldArr[i + 1][j]) && ((fieldArr[i][j] == 'X') || (fieldArr[i][j] == 'O')); //ver
+                        && (fieldArr[i][j] == fieldArr[i + 1][j]) && (fieldArr[i][j] == letter); //ver
 
 
                 if (winnerArrGor[j]) {
@@ -196,25 +127,9 @@ public class CheckField {
                 }
                 // if (winChar[])//winGorCh,
             } //for (int j = 0; j < 3; j++)
-
     }
 
-
-    private boolean TestArr(boolean[] _arr) {
-
-        boolean flagFin = false;
-
-        for (int i = 1; i < _arr.length; i++) {
-
-            if (_arr[i - 1] == _arr[i] && (_arr[i - 1] == true)) {
-                flagFin = true;
-                break;
-            } else {
-                _arr[i] = _arr[i - 1];
-                flagFin = false;
-            }
-        }
-        return flagFin;
-    }
 }
+
+
 

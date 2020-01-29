@@ -1,10 +1,14 @@
+package tttinterface;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import tttclogic.Tic_Toe;
 import tttclogic.TypeGame;
@@ -19,8 +23,10 @@ public class Controller implements Initializable {
     @FXML private Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
     @FXML private Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
     @FXML private Text fstPlayer, sndPlayer, type, levelGame;
-    @FXML private Label going;
+    @FXML private Label going, congrat;
     @FXML private MenuItem newGame, endGame;
+    @FXML private ImageView image;
+    @FXML private Pane paneImage, paneTable;
 
     Button[] buttons;
     Map<Button, TypeGame> btLevel = new HashMap<>();
@@ -33,7 +39,6 @@ public class Controller implements Initializable {
         btLevel.put(btMid, TypeGame.MIDDLE);
         btLevel.put(btHard, TypeGame.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-
     }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
@@ -47,7 +52,7 @@ public class Controller implements Initializable {
         }
         if (ticToe.getPlayer1() != null) {
             gpLevel.setVisible(false);
-            table.setVisible(true);
+            paneTable.setVisible(true);
             ticToe.setPlayer2(type);
             endGame.setDisable(false);
             newGame.setDisable(false);
@@ -61,15 +66,17 @@ public class Controller implements Initializable {
     }
 
     public void clickedNG(ActionEvent actionEvent) {
-        table.setVisible(false);
-        for (Button bt : buttons)
+        paneTable.setVisible(false);
+        for (Button bt : buttons) {
             bt.setText("");
-
+            bt.setDisable(false);
+        }
         gpType.setVisible(true);
         ticToe.setPlayer1(null);
         ticToe.setPlayer2(null);
         newGame.setDisable(true);
         endGame.setDisable(true);
+        ticToe.setLetter('X');
     }
 
     public void clickedEG(ActionEvent actionEvent) {
@@ -84,7 +91,7 @@ public class Controller implements Initializable {
     public void clickedBtPlayer(ActionEvent actionEvent) {
         if (ticToe.getPlayer1() != null) {
             gpPlayer.setVisible(false);
-            table.setVisible(true);
+            paneTable.setVisible(true);
             ticToe.setPlayer2(TypeGame.USER);
             newGame.setDisable(false);
             endGame.setDisable(false);
@@ -102,16 +109,48 @@ public class Controller implements Initializable {
 
     public void clickedBtOn(ActionEvent actionEvent) {
         gpType.setVisible(false);
-        table.setVisible(true);
-        newGame.setDisable(true);
-        endGame.setDisable(true);
+        paneTable.setVisible(true);
+        newGame.setDisable(false);
+        endGame.setDisable(false);
     }
 
     public void clickedButton(ActionEvent actionEvent) {
 
-        Button clickedBtn = (Button) actionEvent.getSource();
-        clickedBtn.getId();
+        going.setVisible(true);
 
+        Button clickedBtn = (Button) actionEvent.getSource();
+
+        if(!"".equals(clickedBtn.getText())) {
+            going.setText("Эта клетка занята,\nиспользуйте другую");
+            return;
+        }
+
+        String id = clickedBtn.getId().substring(3,5);
+        ticToe.setID(id);//меняем флаг для остановки ожидания, передаем координаты
+        ticToe.setWait(true);
+        clickedBtn.setText(String.valueOf(ticToe.getLetter())); //устанавливаем знак
+        ticToe.ticTacToe_Game();
+        clickedBtn.setDisable(false);
+        going.setVisible(false);
+        //TODO мб лучше перенести в логику игры
     }
+
+
+    public Label getGoing() {
+        return going;
+    }
+
+    public Label getCongrat() {
+        return congrat;
+    }
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public Pane getPaneImage() {
+        return paneImage;
+    }
+
 }
 
