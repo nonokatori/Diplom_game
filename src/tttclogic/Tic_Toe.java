@@ -1,18 +1,13 @@
 package tttclogic;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import tttinterface.Controller;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import javafx.scene.control.Button;
 
 public class Tic_Toe {
 
-
     private Enum player1;
     private Enum player2;
-    private Controller controller;
+
+    private Enum winDraw;
 
     private char letter = 'X';
 
@@ -24,28 +19,32 @@ public class Tic_Toe {
     CheckField check = new CheckField(arrField);
     EasyLevel easyLevel = new EasyLevel(arrField);
 
-    public Tic_Toe()
-    {
-        for (int i=0,j = 0; i < arrField.length; i++, j++)
-            arrField[i][j] = ' ';
+    public void initArray (Button [] buttons) {
+        for (int i=0; i < arrField.length; i++)
+            for (int j = 0; j < arrField.length; j++)
+                arrField[i][j] = ' ';
+        for (Button bt : buttons) {
+            bt.setText("");
+            bt.setDisable(false);
+        }
+        setPlayer1(null);
+        setPlayer2(null);
+        letter = 'X';
     }
 
-    public void setWait(boolean wait) {
-        this.wait = wait;
+    public void clicked(Button btn) {
+        if(!"".equals(btn.getText())) {
+//            new Controller().going.setText("Эта клетка занята,\nиспользуйте другую");
+            return;
+        }
+        wait = true;
+        btn.setText(String.valueOf(letter)); //устанавливаем знак
+        this.ID = btn.getId().substring(3,5);
+        ticTacToe_Game();
     }
-
-    public void setLetter(char letter) { this.letter = letter; }
-
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
+    /* для работы с поля в контроллере и  */
     public char getLetter() {
         return letter;
-    }
-
-    public Enum getPlayer2() {
-        return player2;
     }
 
     public Enum getPlayer1() {
@@ -63,7 +62,6 @@ public class Tic_Toe {
     public void ticTacToe_Game () {
 
         char state = letter;
-
         switch (state) {
             case 'X':
                 nextMove(player1);
@@ -75,10 +73,10 @@ public class Tic_Toe {
                 break;
         }
 
-        if (!check.field(letter).equals(null)) {
-            check.field(letter).state(controller);
-            //TODO как останоовить игру....
-
+        GameState st = check.field(state);
+        if (st != (null)) {
+            winDraw = st;
+            //TODO как остановить игру....
         }
     }
 
@@ -93,35 +91,9 @@ public class Tic_Toe {
         }
         else easyLevel.lvlSelect(type, letter);
     }
+
+    public Enum getWinDraw() {
+        return winDraw;
+    }
 }
 
-enum GameState {
-    WIN {
-        @Override
-        public void state(Controller controller) {
-            String player =  new Tic_Toe().getLetter() == 'X' ? " игрок 1" : " игрок 2";
-            controller.getPaneImage().setVisible(true);
-            try {
-                ImageView iv = new ImageView(new Image(new FileInputStream("win.jpg")));
-            } catch (FileNotFoundException e) {
-                System.out.println("О БОЖИ ОШИБКА В ЕНУМЕ ПОБЕДИТЕЛЯ");
-            }
-            controller.getCongrat().setText("Победитель" + player );
-        }
-    },
-    DRAW {
-        @Override
-        public void state(Controller controller) {
-            controller.getPaneImage().setVisible(true);
-            try {
-                ImageView iv = new ImageView(new Image(new FileInputStream("draw.jpg")));
-            } catch (FileNotFoundException e) {
-                System.out.println("О БОЖИ ОШИБКА В ЕНУМЕ НИЧЬЕЙ");
-            }
-            controller.getCongrat().setText("Ничья");
-        }
-
-    };
-
-    public abstract void state (Controller controller);
-}

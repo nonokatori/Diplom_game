@@ -5,16 +5,11 @@ public class CheckField {
     private int length = 3;
     private char[][] fieldArr;
     private char letter;
-
-    private char[] winChar = new char[4];
-    private char[] winCharGor = new char[length];
-    private char[] winCharVer = new char[length];
-    private char winCharDiagPl;
-    private char winCharDiagMin;
+    private boolean win;
 
     private boolean[] winnerArr = new boolean[4];
-    private boolean[] winnerArrGor = new boolean[length];
-    private boolean[] winnerArrVer = new boolean[length];
+    private boolean winnerArrGor;
+    private boolean winnerArrVer;
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
 
@@ -52,37 +47,37 @@ public class CheckField {
             System.out.println("Draw new field.");
             flagFin = true;
         }
+        PrintTicTac();
 
         return flagFin;
     } //заполнено ли поле
 
+    public void PrintTicTac () {
 
-    private boolean winnerSelection() {
-        boolean stateFlag = false;
+        int n = 0;
 
-        gorVerWinner();
-        diagWinner();
-
-        winnerFind(winnerArrVer, winCharVer, 0);
-        winnerFind(winnerArrGor, winCharGor, 1);
-        winnerArr[2] = winnerArrDiagPl;
-        winnerArr[3] = winnerArrDiagMin;
-
-        winChar[2] = winCharDiagPl;
-        winChar[3] = winCharDiagMin;
-
-        for (int i = 0; i < winnerArr.length; i++) {
-            if (winnerArr[i]) {
-                System.out.println(winChar[i] + " wins");
-                stateFlag = true;
-                break;
-            } else stateFlag = false;
+        System.out.println("---------");
+        for (int j = n; j <3; j++)
+        {
+            System.out.print("| ");
+            for (int i = 0; i <3; i++)
+            {
+                System.out.print(fieldArr[j][i] + " ");
+            }
+            System.out.println("|");
         }
 
-        return stateFlag;
+        System.out.println("---------");
+
+    }
+    private boolean winnerSelection() {
+        gorVerWinner();
+        diagWinner();
+        PrintTicTac();
+        return winnerArrDiagMin || winnerArrDiagPl || winnerArrGor || winnerArrVer;
     }
 
-    private void winnerFind(boolean[] _arr, char[] _char, int _n) {
+   /* private void winnerFind(boolean[] _arr, char[] _char, int _n) {
 
         for (int i = 0; i < _arr.length; i++) {// выставляем флаг, что победитель найден
             if (_arr[i] == true) {
@@ -91,7 +86,7 @@ public class CheckField {
                 break;
             } else winnerArr[_n] = false;
         }
-    }
+    }*/
 
     private void diagWinner() {
 
@@ -99,11 +94,6 @@ public class CheckField {
                 (fieldArr[1][1] == fieldArr[2][2]) && (fieldArr[1][1] == letter); // диагональ положительная
         winnerArrDiagMin = (fieldArr[2][0] == fieldArr[1][1]) &&
                 (fieldArr[1][1] == fieldArr[0][2]) && (fieldArr[1][1] == letter); //диагональ отрицательная
-
-        if (winnerArrDiagMin)
-            winCharDiagMin = fieldArr[1][1];   //winDiagMinCh,
-        if (winnerArrDiagPl) winCharDiagPl = fieldArr[1][1];  //winDiagPlCh,
-
     }
 
     private void gorVerWinner() {
@@ -111,21 +101,15 @@ public class CheckField {
         for (int j = 0; j < length; j++)
             for (int i = 1; i < length - 1; i++) {
 
-                winnerArrGor[j] = (fieldArr[j][i - 1] == fieldArr[j][i])
+                winnerArrGor = (fieldArr[j][i - 1] == fieldArr[j][i])
                         && (fieldArr[j][i] == fieldArr[j][i + 1]) && (fieldArr[j][i] == letter); // gor
 
-                winnerArrVer[j] = (fieldArr[i - 1][j] == fieldArr[i][j])
+                winnerArrVer = (fieldArr[i - 1][j] == fieldArr[i][j])
                         && (fieldArr[i][j] == fieldArr[i + 1][j]) && (fieldArr[i][j] == letter); //ver
 
-
-                if (winnerArrGor[j]) {
-                    winCharGor[j] = fieldArr[j][i]; //winGorCh,
-
+                if (winnerArrGor || winnerArrVer) {
+                    return;
                 }
-                if (winnerArrVer[j]) {
-                    winCharVer[j] = fieldArr[i][j];
-                }
-                // if (winChar[])//winGorCh,
             } //for (int j = 0; j < 3; j++)
     }
 

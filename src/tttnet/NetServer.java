@@ -1,4 +1,4 @@
-package tttclogic;
+package tttnet;
 
 public class NetServer {
 

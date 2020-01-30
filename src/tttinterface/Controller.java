@@ -6,32 +6,36 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import tttclogic.GameState;
 import tttclogic.Tic_Toe;
 import tttclogic.TypeGame;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    @FXML private GridPane table, gpType, gpPlayer, gpLevel;
-    @FXML private Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
-    @FXML private Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
-    @FXML private Text fstPlayer, sndPlayer, type, levelGame;
-    @FXML private Label going, congrat;
-    @FXML private MenuItem newGame, endGame;
-    @FXML private ImageView image;
-    @FXML private Pane paneImage, paneTable;
+    @FXML public GridPane table, gpType, gpPlayer, gpLevel;
+    @FXML public Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
+    @FXML public Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
+    @FXML public Text fstPlayer, sndPlayer, type, levelGame;
+    @FXML public Label going, congrat;
+    @FXML public MenuItem newGame, endGame;
+    @FXML public ImageView image;
+    @FXML public Pane paneImage, paneTable;
 
-    Button[] buttons;
+    public Button[] buttons;
     Map<Button, TypeGame> btLevel = new HashMap<>();
 
-    Tic_Toe ticToe = new Tic_Toe();
+    private Tic_Toe ticToe = new Tic_Toe();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -39,6 +43,7 @@ public class Controller implements Initializable {
         btLevel.put(btMid, TypeGame.MIDDLE);
         btLevel.put(btHard, TypeGame.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
+        ticToe.initArray(buttons);
     }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
@@ -66,17 +71,11 @@ public class Controller implements Initializable {
     }
 
     public void clickedNG(ActionEvent actionEvent) {
-        paneTable.setVisible(false);
-        for (Button bt : buttons) {
-            bt.setText("");
-            bt.setDisable(false);
-        }
+        paneImage.setVisible(false);
         gpType.setVisible(true);
-        ticToe.setPlayer1(null);
-        ticToe.setPlayer2(null);
+        ticToe.initArray(buttons); //очистка массивов, установка первоначального символа
         newGame.setDisable(true);
         endGame.setDisable(true);
-        ticToe.setLetter('X');
     }
 
     public void clickedEG(ActionEvent actionEvent) {
@@ -115,41 +114,28 @@ public class Controller implements Initializable {
     }
 
     public void clickedButton(ActionEvent actionEvent) {
-
         going.setVisible(true);
-
-        Button clickedBtn = (Button) actionEvent.getSource();
-
-        if(!"".equals(clickedBtn.getText())) {
-            going.setText("Эта клетка занята,\nиспользуйте другую");
-            return;
-        }
-
-        String id = clickedBtn.getId().substring(3,5);
-        ticToe.setID(id);//меняем флаг для остановки ожидания, передаем координаты
-        ticToe.setWait(true);
-        clickedBtn.setText(String.valueOf(ticToe.getLetter())); //устанавливаем знак
-        ticToe.ticTacToe_Game();
-        clickedBtn.setDisable(false);
+        ticToe.clicked((Button) actionEvent.getSource());//меняем флаг для остановки ожидания, передаем координаты
         going.setVisible(false);
-        //TODO мб лучше перенести в логику игры
+        if (ticToe.getWinDraw() != null) viewPage();
     }
 
-
-    public Label getGoing() {
-        return going;
-    }
-
-    public Label getCongrat() {
-        return congrat;
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
-    public Pane getPaneImage() {
-        return paneImage;
+    public void viewPage () {
+        String player =  new Tic_Toe().getLetter() == 'X' ? " игрок 1" : " игрок 2";
+        paneImage.setVisible(true);
+        paneTable.setVisible(false);
+        try {
+            if (ticToe.getWinDraw().equals(GameState.WIN)) {
+                new ImageView(new Image(new FileInputStream("resource/win.jpg")));
+                congrat.setText("Победитель" + player );
+            }
+            else {
+                new ImageView(new Image(new FileInputStream("resource/draw.jpg")));
+                congrat.setText("Ничья");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }
