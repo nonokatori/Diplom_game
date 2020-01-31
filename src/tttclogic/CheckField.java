@@ -18,14 +18,14 @@ public class CheckField {
     }
 
 
-    public GameState field(char letter) {
+    public Tic_Toe.GameState field(char letter) {
 
         this.letter = letter;
 
         if (winnerSelection())
-            return GameState.WIN;
+            return Tic_Toe.GameState.WIN;
         else if (drawNewField())
-            return GameState.DRAW;
+            return Tic_Toe.GameState.DRAW;
         return null;
     }
 
