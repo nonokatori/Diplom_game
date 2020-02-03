@@ -55,7 +55,7 @@ public class EasyLevel {
 
         int counX = 0, counO = 0;
         char state;
-        int l = 0, k=0; /////
+        int l = 0, k=0;
 
         boolean moveDo = false;
 
@@ -122,7 +122,6 @@ public class EasyLevel {
             }
         }
         if ((counX == 2 || counO == 2) && arrField[l][l]==' ') {
-
             arrField[l][l] = let;
             return moveDo = true;
         }
@@ -145,9 +144,7 @@ public class EasyLevel {
                 return moveDo = true;
             }
         }
-
         return moveDo;
-
     }
 
 
@@ -200,16 +197,16 @@ public class EasyLevel {
             bestScore = evaluate();
         } else {
             for (int[] move : nextMoves) {
-                // Try this move for the current "player"
+
                 _newField[move[0]][move[1]] = _player;
-                if (_player == letterOur) {  // mySeed (computer) is maximizing player
+                if (_player == letterOur) {
                     currentScore = methodMinimax(_depth - 1, letterEnemy,_newField)[0];
                     if (currentScore > bestScore) {
                         bestScore = currentScore;
                         bestRow = move[0];
                         bestCol = move[1];
                     }
-                } else {  // oppSeed is minimizing player
+                } else {
                     currentScore = methodMinimax(_depth - 1, letterOur, _newField)[0];
                     if (currentScore < bestScore) {
                         bestScore = currentScore;
@@ -217,7 +214,7 @@ public class EasyLevel {
                         bestCol = move[1];
                     }
                 }
-                // Undo move
+
                 _newField[move[0]][move[1]] = ' ';
             }
         }
@@ -227,12 +224,10 @@ public class EasyLevel {
     private List<int[]> generateMoves() {
         List<int[]> nextMoves = new ArrayList<int[]>(); // allocate List
 
-        // If gameover, i.e., no next move
         if (hasWon(letterOur) || hasWon(letterEnemy)) {
-            return nextMoves;   // return empty list
+            return nextMoves;
         }
 
-        // Search for empty cells and add to the List
         for (int row = 0; row < arrField.length; ++row) {
             for (int col = 0; col <arrField.length; ++col) {
                 if (arrField[row][col] == ' ') {

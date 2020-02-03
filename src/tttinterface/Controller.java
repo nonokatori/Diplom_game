@@ -1,5 +1,6 @@
 package tttinterface;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,14 +20,22 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    @FXML public GridPane table, gpType, gpPlayer, gpLevel;
-    @FXML public Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
-    @FXML public Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
-    @FXML public Text fstPlayer, sndPlayer, type, levelGame;
-    @FXML public Label going, congrat;
-    @FXML public MenuItem newGame, endGame;
-    @FXML public ImageView image;
-    @FXML public Pane paneImage, paneTable;
+    @FXML
+    public GridPane table, gpType, gpPlayer, gpLevel;
+    @FXML
+    public Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
+    @FXML
+    public Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
+    @FXML
+    public Text fstPlayer, sndPlayer, type, levelGame;
+    @FXML
+    public Label going, congrat;
+    @FXML
+    public MenuItem newGame, endGame;
+    @FXML
+    public ImageView image;
+    @FXML
+    public Pane paneImage, paneTable;
 
     public Button[] buttons;
     Map<Button, TypeGame> btLevel = new HashMap<>();
@@ -39,9 +48,36 @@ public class Controller implements Initializable {
         btLevel.put(btMid, TypeGame.MIDDLE);
         btLevel.put(btHard, TypeGame.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-        ticToe.setBtn(buttons);
-        //ticToe.initArray(buttons);
+        ticToe.setBtn(buttons, going);
+        ticToe.initArray();
 
+
+
+        Thread thread = new Thread(() -> {
+            while (true) {
+                Enum flag = ticToe.mainLogic();
+                if () break;
+            }
+        });
+        thread.start();
+
+
+    }
+
+    void update() {
+
+        char [] field = new char[9];
+        int coun = 0;
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; i < 3; i++){
+                field[coun] = ticToe.getArrField()[i][j];
+                coun++;
+        }
+        for (coun = 0; coun< field.length; coun++) {
+            if(!buttons[coun].getText().equals(field[coun]))
+                buttons[coun].setText(String.valueOf(field[coun]));
+            coun++;
+        }
     }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
@@ -66,7 +102,7 @@ public class Controller implements Initializable {
 
     public void clickedNG(ActionEvent actionEvent) {
         gpType.setVisible(true);
-        ticToe.initArray(buttons); //очистка массивов, установка первоначального символа
+        ticToe.initArray(); //очистка массивов, установка первоначального символа
         newGame.setDisable(true);
         endGame.setDisable(true);
         paneTable.setVisible(false);
@@ -107,7 +143,7 @@ public class Controller implements Initializable {
 
     public void clickedButton(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        if(!"".equals(btn.getText())) {
+        if (!"".equals(btn.getText())) {
             going.setText("Эта клетка занята,\nиспользуйте другую");
             return;
         }
@@ -129,6 +165,4 @@ public class Controller implements Initializable {
         }
     }
 
-
 }
-
