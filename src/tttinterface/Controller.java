@@ -11,8 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import tttclogic.EnumGame;
 import tttclogic.Tic_Toe;
-import tttclogic.TypeGame;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -38,46 +38,40 @@ public class Controller implements Initializable {
     public Pane paneImage, paneTable;
 
     public Button[] buttons;
-    Map<Button, TypeGame> btLevel = new HashMap<>();
+    Map<Button, EnumGame.Type> btLevel = new HashMap<Button, EnumGame.Type>();
 
     private Tic_Toe ticToe = new Tic_Toe();
+    private boolean end = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        btLevel.put(btEasy, TypeGame.EASY);
-        btLevel.put(btMid, TypeGame.MIDDLE);
-        btLevel.put(btHard, TypeGame.HARD);
+        btLevel.put(btEasy, EnumGame.Type.EASY);
+        btLevel.put(btMid, EnumGame.Type.MIDDLE);
+        btLevel.put(btHard, EnumGame.Type.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-        ticToe.setBtn(buttons, going);
-        ticToe.initArray();
+        createLogicThread();
+        update();
+    }
 
-
-
-        Thread thread = new Thread(() -> {
-            while (true) {
-                Enum flag = ticToe.mainLogic();
-                if () break;
-            }
-        });
-        thread.start();
-
-
+    private void initState() {
+        for (Button bt : buttons) {
+            bt.setText("");
+            bt.setDisable(false);
+        }
+        going.setText("");
     }
 
     void update() {
 
-        char [] field = new char[9];
         int coun = 0;
         for (int i = 0; i < 3; i++)
-            for (int j = 0; i < 3; i++){
-                field[coun] = ticToe.getArrField()[i][j];
+            for (int j = 0; j < 3; j++){
+                if(!buttons[coun].getText().equals(ticToe.getArrField()[i][j])) {
+                    buttons[coun].setText(Character.toString(ticToe.getArrField()[i][j]));
+                }
                 coun++;
-        }
-        for (coun = 0; coun< field.length; coun++) {
-            if(!buttons[coun].getText().equals(field[coun]))
-                buttons[coun].setText(String.valueOf(field[coun]));
-            coun++;
-        }
+            }
+
     }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
@@ -102,10 +96,12 @@ public class Controller implements Initializable {
 
     public void clickedNG(ActionEvent actionEvent) {
         gpType.setVisible(true);
-        ticToe.initArray(); //очистка массивов, установка первоначального символа
+        initState(); //очистка массивов, установка первоначального символа
         newGame.setDisable(true);
         endGame.setDisable(true);
         paneTable.setVisible(false);
+        createLogicThread();
+        ticToe.initState();
     }
 
     public void clickedEG(ActionEvent actionEvent) {
@@ -120,10 +116,10 @@ public class Controller implements Initializable {
 
     public void clickedBtPlayer(ActionEvent actionEvent) {
         if (ticToe.getPlayer1() != null) {
-            ticToe.setPlayer2(TypeGame.USER);
+            ticToe.setPlayer2(EnumGame.Type.USER);
             visibleObj(true);
         } else {
-            ticToe.setPlayer1(TypeGame.USER);
+            ticToe.setPlayer1(EnumGame.Type.USER);
             visibleObj(false);
         }
     }
@@ -138,18 +134,13 @@ public class Controller implements Initializable {
         paneTable.setVisible(true);
         newGame.setDisable(false);
         endGame.setDisable(false);
-        ticToe.setGoGame(true);
     }
 
     public void clickedButton(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        if (!"".equals(btn.getText())) {
-            going.setText("Эта клетка занята,\nиспользуйте другую");
-            return;
-        }
-        going.setVisible(true);
+        btn.setDisable(true);
         ticToe.clicked(btn);//меняем флаг для остановки ожидания, передаем координаты
-        going.setVisible(false);
+
     }
 
     public void visibleObj(boolean flag) {
@@ -161,8 +152,43 @@ public class Controller implements Initializable {
         } else {
             fstPlayer.setVisible(false);
             sndPlayer.setVisible(true);
-            ticToe.setGoGame(true);
         }
     }
+
+    public void createLogicThread() {
+        Thread thread = new Thread(() -> {
+            Enum flag;
+            ticToe.initState();
+            while (true) {
+                flag = ticToe.mainLogic();
+
+                if (EnumGame.State.WIN.equals(flag)) {
+                    String player = ticToe.getLetter() == 'X' ? "крестики" :"нолики";
+                    Platform.runLater(() -> {
+                        update();
+                        going.setText("Победили " + player);
+                    });
+                    break;
+                }
+                if (EnumGame.State.DRAW.equals(flag)) {
+                    Platform.runLater(() -> {
+                        update();
+                        going.setText("Ничья, начните новую игру");
+                    });
+                    break;
+                }
+
+                if (EnumGame.State.SET.equals(flag)) {
+                    Platform.runLater(() -> update());
+                }
+
+                if(end = true) {
+                    Thread.interrupted();
+                }
+            }
+        });
+        thread.start();
+    }
+
 
 }

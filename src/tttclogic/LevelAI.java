@@ -3,52 +3,38 @@ package tttclogic;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tttclogic.TypeGame.*;
-
-public class EasyLevel {
+public class LevelAI {
 
 
     private int len;
     private char [][] arrField;
     private char let;
+    private int[] coord = new int[2];
 
-    private char [] field = new char[9];
     private char letterOur, letterEnemy;
 
 
-    String [] level = {
-            "easy",
-            "medium",
-            "hard"
-    };
-
-    public EasyLevel (char [][] _arr) {
+    public LevelAI(char [][] _arr) {
         len = 3;
-        arrField = _arr;
-
+        arrField = _arr.clone();
         int  n = 0;
-        for (int i = 0; i < len; i++)
-            for (int j = 0; j < len; j++){
-                field[n]  = _arr [i][j];
-                n++;
-            }
 
     }
 
-    public void lvlSelect(Enum type, char _let) {
+    public int[] lvlSelect(Enum type, char _let) {
 
         let = _let;
-        System.out.println ("Making move level " + type);
+        System.out.println ("Making move level " + type.toString());
 
-
-        if (EASY.equals(type)) {
+        if (EnumGame.Type.EASY.equals(type)) {
             randomMove();
-        } else if (MIDDLE.equals(type)) {
+        } else if (EnumGame.Type.MIDDLE.equals(type)) {
             if (!MediumLevelMove())
                 randomMove();
-        } else if (HARD.equals(type)) {
+        } else if (EnumGame.Type.HARD.equals(type)) {
             letter(_let);
         }
+        return coord;
     }
 
     private boolean MediumLevelMove() {
@@ -75,7 +61,9 @@ public class EasyLevel {
                 }
                 if ((counX == 2 || counO == 2) && arrField[l][j]==' ') {
 
-                    arrField[l][j] = let;
+                    coord[0] = l;
+                    coord[1] = j;
+//                    arrField[l][j] = let;
                     return moveDo = true;
                 }
             }
@@ -100,7 +88,9 @@ public class EasyLevel {
                 }
                 if ((counX == 2 || counO == 2) && arrField[i][l]==' ') {
 
-                    arrField[i][l] = let;
+                    coord[0] = i;
+                    coord[1] = l;
+//                    arrField[i][l] = let;
                     return moveDo = true;
                 }
             }
@@ -122,7 +112,9 @@ public class EasyLevel {
             }
         }
         if ((counX == 2 || counO == 2) && arrField[l][l]==' ') {
-            arrField[l][l] = let;
+            coord[0] = l;
+            coord[1] = l;
+//            arrField[l][l] = let;
             return moveDo = true;
         }
 
@@ -140,7 +132,9 @@ public class EasyLevel {
                     k = j;
             }
             if ((counX == 2 || counO == 2) && arrField[l][k]==' ') {
-                arrField[l][k] = let;
+                coord[0] = l;
+                coord[1] = k;
+//                arrField[l][k] = let;
                 return moveDo = true;
             }
         }
@@ -171,10 +165,10 @@ public class EasyLevel {
                 l = arrRandom[rndNum].charAt(2);
         System.out.println(Character.digit(k,10) + " " + Character.digit(l,10));
 
-        arrField[Character.digit(k,10)][Character.digit(l,10)] = let;
-
+        coord[0] = Character.digit(k,10);
+        coord[1] = Character.digit(l,10);
+//        arrField[Character.digit(k,10)][Character.digit(l,10)] = let;
     }
-
 
     private void letter (char _letter) {
         letterOur = _letter;
@@ -182,7 +176,9 @@ public class EasyLevel {
         letterEnemy = letterOur == 'X' ? 'O' : 'X';
         int[] let = methodMinimax(2,letterOur, arrField);
 
-        arrField[let[1]][let[2]] = _letter;
+        coord[0] = let[1];
+        coord[1] = let[2];
+//        arrField[let[1]][let[2]] = _letter;
     }
 
     private int[] methodMinimax (int _depth, char _player, char[][] _newField) {
@@ -222,7 +218,7 @@ public class EasyLevel {
     }
 
     private List<int[]> generateMoves() {
-        List<int[]> nextMoves = new ArrayList<int[]>(); // allocate List
+        List<int[]> nextMoves = new ArrayList<>(); // allocate List
 
         if (hasWon(letterOur) || hasWon(letterEnemy)) {
             return nextMoves;
@@ -237,7 +233,6 @@ public class EasyLevel {
         }
         return nextMoves;
     }
-
 
     private int evaluate() {
         int score = 0;

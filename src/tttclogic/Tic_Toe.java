@@ -1,88 +1,85 @@
 package tttclogic;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 public class Tic_Toe {
 
     private Enum player1;
     private Enum player2;
     private char letter = 'X';
-    private String ID;
-    private boolean wait;
-    private boolean goGame;
-    private char [][] arrField = new char[3][3];
-    private Button [] btn = new Button[9];
-    private Label going;
+    private volatile String ID;
 
     private boolean winnerArrGor;
     private boolean winnerArrVer;
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
 
-    EasyLevel easyLevel = new EasyLevel(arrField);
+    ArraySync arraySync = new ArraySync();
+    LevelAI easyLevel = new LevelAI(arraySync.getArrField());
 
     public Enum mainLogic() {
         char state = this.letter;
 
         if(player2==null) return player2;
-
         switch (state) {
             case 'X':
                 nextMove(player1);
-                letter = 'O';
                 break;
             case 'O':
                 nextMove(player2);
-                letter = 'X';
                 break;
         }
-        GameState st = field(state);
-        if(GameState.WIN.equals(st)) {
-            String player = letter == 'X' ? "игрок 1" :"игрок 2";
-            going.setText("Победил "+ player);
-            return GameState.WIN;
+        Enum st = field(letter); //может выдать ошибку в знаке
+        if(EnumGame.State.WIN.equals(st)) return EnumGame.State.WIN;
+        if (EnumGame.State.DRAW.equals(st)) return EnumGame.State.DRAW;
+        if (arraySync.isSet()) {
+            arraySync.setSet(false);
+            letter = letter == 'X' ? 'O' : 'X';
+            ID = ID != null? null: ID;
+            return EnumGame.State.SET;
         }
-        if (GameState.DRAW.equals(st)) {
-                going.setText("Ничья");
-            return GameState.DRAW;
-            }
-
-        return GameState.NOTHING;
+        return EnumGame.State.NOTHING;
     }
 
-    public void initArray () {
-        for (int i=0; i < arrField.length; i++)
-            for (int j = 0; j < arrField.length; j++)
-                arrField[i][j] = ' ';
-        for (Button bt : btn) {
-            bt.setText("");
-            bt.setDisable(false);
-        }
-        setPlayer1(null);
-        setPlayer2(null);
+    public void initState () {
+        for (int i=0; i < arraySync.getArrField().length; i++)
+            for (int j = 0; j < arraySync.getArrField().length; j++)
+                arraySync.setCoord(i, j,' ');
+        player1 = null;
+        player2 = null;
         letter = 'X';
-        going.setText("");
+        ID = null;
     }
 
     public void clicked(Button btn) {
-        wait = true;
-        this.ID = btn.getId().substring(3,5);
+        this.ID = btn.getId().substring(3, 5);
     }
 
     private void nextMove(Enum type) {
-        if (TypeGame.USER.equals(type)) {
-            while (!wait) {
+        int i = 0,k = 0;
+        if (EnumGame.Type.USER.equals(type)) {
+            while (ID == null) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(250);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            arrField[Character.getNumericValue(ID.charAt(0))][Character.getNumericValue(ID.charAt(1))] = letter;
-            wait = false;
+            i= Character.getNumericValue(ID.charAt(0));
+            k = Character.getNumericValue(ID.charAt(1));
+
         }
-        else easyLevel.lvlSelect(type, letter);
+        else {
+            int [] coord = easyLevel.lvlSelect(type, letter);
+            i = coord[0];
+            k = coord[1];
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        arraySync.setCoord(i,k, letter);
 
     }
 
@@ -98,26 +95,22 @@ public class Tic_Toe {
         this.player2 = player2;
     }
 
-    public void setGoGame(boolean goGame) {
-        this.goGame = goGame;
+
+    public char getLetter() {
+        return letter;
     }
 
-    public char[][] getArrField() {
-        return arrField;
+    public Enum getPlayer2() {
+        return player2;
     }
 
-    public void setBtn(Button[] btn, Label going) {
-        this.btn = btn;
-        this.going = going;
-
-    }
-
-    public GameState field(char letter) {
+    public EnumGame.State field(char letter) {
         if (winnerSelection(letter))
-            return GameState.WIN;
+            return EnumGame.State.WIN;
         else if (drawNewField(letter))
-            return GameState.DRAW;
-        return GameState.NOTHING;
+            return EnumGame.State.DRAW;
+        printTicTac();
+        return EnumGame.State.NOTHING;
     }
 
     private boolean drawNewField(char letter) {
@@ -129,7 +122,7 @@ public class Tic_Toe {
 
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++) {
-                flag = arrField[i][j] == ' ';
+                flag = arraySync.getArrField()[i][j] == ' ';
                 if (!flag) coun++;
             }
 
@@ -153,7 +146,7 @@ public class Tic_Toe {
             System.out.print("| ");
             for (int i = 0; i <3; i++)
             {
-                System.out.print(arrField[j][i] + " ");
+                System.out.print(arraySync.getArrField()[j][i] + " ");
             }
             System.out.println("|");
         }
@@ -163,26 +156,31 @@ public class Tic_Toe {
     }
 
     private boolean winnerSelection(char letter) {
-        winnerArrDiagPl = (arrField[0][0] == arrField[1][1]) &&
-                (arrField[1][1] == arrField[2][2]) && (arrField[1][1] == letter); // диагональ положительная
-        winnerArrDiagMin = (arrField[2][0] == arrField[1][1]) &&
-                (arrField[1][1] == arrField[0][2]) && (arrField[1][1] == letter); //диагональ отрицательная
+        winnerArrDiagPl = (arraySync.getArrField()[0][0] ==  arraySync.getArrField()[1][1])
+                && (arraySync.getArrField()[1][1] ==  arraySync.getArrField()[2][2])
+                && (arraySync.getArrField()[1][1] == letter); // диагональ положительная
+        winnerArrDiagMin = (arraySync.getArrField()[2][0] == arraySync.getArrField()[1][1]) &&
+                (arraySync.getArrField()[1][1] == arraySync.getArrField()[0][2])
+                && (arraySync.getArrField()[1][1] == letter); //диагональ отрицательная
 
         for (int j = 0; j < 3; j++) {
-            winnerArrVer = (arrField[0][j] == arrField[1][j])
-                    && (arrField[1][j] == arrField[2][j]) && (arrField[1][j] == letter); //ver
-            winnerArrGor = (arrField[j][0] == arrField[j][1])
-                    && (arrField[j][1] == arrField[j][2]) && (arrField[j][1] == letter); // gor
+            winnerArrVer = (arraySync.getArrField()[0][j] == arraySync.getArrField()[1][j])
+                    && (arraySync.getArrField()[1][j] == arraySync.getArrField()[2][j])
+                    && (arraySync.getArrField()[1][j] == letter); //ver
+            winnerArrGor = (arraySync.getArrField()[j][0] == arraySync.getArrField()[j][1])
+                    && (arraySync.getArrField()[j][1] == arraySync.getArrField()[j][2])
+                    && (arraySync.getArrField()[j][1] == letter); // gor
 
             if (winnerArrGor || winnerArrVer) break;
         }
 
         printTicTac();
         return winnerArrDiagMin || winnerArrDiagPl || winnerArrGor || winnerArrVer;
+    } //проверка победных комбинаций
+
+    public char[][] getArrField() {
+        return arraySync.getArrField();
     }
 
-    public enum GameState {
-        WIN, DRAW, NOTHING
-    }
 }
 
