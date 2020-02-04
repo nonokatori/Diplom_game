@@ -7,7 +7,8 @@ public class LevelAI {
 
 
     private int len;
-    private char [][] arrField;
+    private char[][] arrField;
+    private char[][] arrayTest = new char[3][3];
     private char let;
     private int[] coord = new int[2];
 
@@ -16,12 +17,18 @@ public class LevelAI {
 
     public LevelAI(char [][] _arr) {
         len = 3;
-        arrField = _arr.clone();
+        arrField = _arr;
         int  n = 0;
 
     }
 
     public int[] lvlSelect(Enum type, char _let) {
+
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++) {
+                arrayTest[i][j] = arrField[i][j];
+            }
+        }
 
         let = _let;
         System.out.println ("Making move level " + type.toString());
@@ -174,7 +181,7 @@ public class LevelAI {
         letterOur = _letter;
 
         letterEnemy = letterOur == 'X' ? 'O' : 'X';
-        int[] let = methodMinimax(2,letterOur, arrField);
+        int[] let = methodMinimax(2,letterOur, arrayTest);
 
         coord[0] = let[1];
         coord[1] = let[2];
@@ -224,9 +231,9 @@ public class LevelAI {
             return nextMoves;
         }
 
-        for (int row = 0; row < arrField.length; ++row) {
-            for (int col = 0; col <arrField.length; ++col) {
-                if (arrField[row][col] == ' ') {
+        for (int row = 0; row < arrayTest.length; ++row) {
+            for (int col = 0; col <arrayTest.length; ++col) {
+                if (arrayTest[row][col] == ' ') {
                     nextMoves.add(new int[] {row, col});
                 }
             }
@@ -252,14 +259,14 @@ public class LevelAI {
         int score = 0;
 
         // First cell
-        if (arrField[row1][col1] == letterOur) {
+        if (arrayTest[row1][col1] == letterOur) {
             score = 1;
-        } else if (arrField[row1][col1] == letterEnemy) {
+        } else if (arrayTest[row1][col1] == letterEnemy) {
             score = -1;
         }
 
         // Second cell
-        if (arrField[row2][col2] == letterOur) {
+        if (arrayTest[row2][col2] == letterOur) {
             if (score == 1) {   // cell1 is mySeed
                 score = 10;
             } else if (score == -1) {  // cell1 is oppSeed
@@ -267,7 +274,7 @@ public class LevelAI {
             } else {  // cell1 is empty
                 score = 1;
             }
-        } else if (arrField[row2][col2] == letterEnemy) {
+        } else if (arrayTest[row2][col2] == letterEnemy) {
             if (score == -1) { // cell1 is oppSeed
                 score = -10;
             } else if (score == 1) { // cell1 is mySeed
@@ -278,7 +285,7 @@ public class LevelAI {
         }
 
         // Third cell
-        if (arrField[row3][col3] == letterOur) {
+        if (arrayTest[row3][col3] == letterOur) {
             if (score > 0) {  // cell1 and/or cell2 is mySeed
                 score *= 10;
             } else if (score < 0) {  // cell1 and/or cell2 is oppSeed
@@ -286,7 +293,7 @@ public class LevelAI {
             } else {  // cell1 and cell2 are empty
                 score = 1;
             }
-        } else if (arrField[row3][col3] == letterEnemy) {
+        } else if (arrayTest[row3][col3] == letterEnemy) {
             if (score < 0) {  // cell1 and/or cell2 is oppSeed
                 score *= 10;
             } else if (score > 1) {  // cell1 and/or cell2 is mySeed
@@ -306,10 +313,10 @@ public class LevelAI {
 
     private boolean hasWon(char _player) {
         int pattern = 0b000000000;  // 9-bit pattern for the 9 cells
-        for (int row = 0; row < arrField.length; ++row) {
-            for (int col = 0; col < arrField.length; ++col) {
-                if (arrField[row][col] == _player) {
-                    pattern |= (1 << (row * arrField.length + col));
+        for (int row = 0; row < arrayTest.length; ++row) {
+            for (int col = 0; col < arrayTest.length; ++col) {
+                if (arrayTest[row][col] == _player) {
+                    pattern |= (1 << (row * arrayTest.length + col));
                 }
             }
         }

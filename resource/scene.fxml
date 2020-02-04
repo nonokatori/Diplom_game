@@ -7,13 +7,16 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.effect.Blend?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.MotionBlur?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <VBox prefHeight="265.0" prefWidth="166.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tttinterface.Controller">
@@ -101,24 +104,76 @@
                               <Insets />
                           </opaqueInsets>
                           <children>
-                              <Button fx:id="btn01" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" />
-                              <Button fx:id="btn00" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" />
-                              <Button fx:id="btn02" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" />
-                              <Button fx:id="btn10" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.rowIndex="1" />
-                              <Button fx:id="btn11" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Button fx:id="btn12" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Button fx:id="btn20" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.rowIndex="2" />
-                              <Button fx:id="btn21" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Button fx:id="btn22" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Button fx:id="btn01" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn00" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <MotionBlur radius="0.0">
+                                 <input>
+                                    <Glow />
+                                 </input>
+                              </MotionBlur>
+                           </effect></Button>
+                              <Button fx:id="btn02" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn10" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn11" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn12" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn20" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn21" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
+                              <Button fx:id="btn22" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" onAction="#clickedButton" prefHeight="45.0" prefWidth="45.0" text="" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <Reflection fraction="0.0" topOpacity="0.0" />
+                           </effect></Button>
                           </children>
                       </GridPane>
-                      <Label fx:id="going" layoutX="41.0" layoutY="159.0" visible = "true" />
-               </children>
-            </Pane>
-            <Pane fx:id="paneImage" layoutX="14.0" layoutY="55.0" prefHeight="271.0" prefWidth="212.0" visible="false">
-               <children>
-                  <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="6.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="congrat" layoutX="50.0" layoutY="226.0" />
+                      <Label fx:id="going" layoutX="4.0" layoutY="159.0" prefHeight="45.0" prefWidth="126.0" textAlignment="JUSTIFY" visible="true" />
                </children>
             </Pane>
             </children>

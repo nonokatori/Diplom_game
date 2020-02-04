@@ -102,6 +102,8 @@ public class Controller implements Initializable {
         paneTable.setVisible(false);
         createLogicThread();
         ticToe.initState();
+        fstPlayer.setVisible(true);
+        sndPlayer.setVisible(false);
     }
 
     public void clickedEG(ActionEvent actionEvent) {
@@ -173,7 +175,7 @@ public class Controller implements Initializable {
                 if (EnumGame.State.DRAW.equals(flag)) {
                     Platform.runLater(() -> {
                         update();
-                        going.setText("Ничья, начните новую игру");
+                        going.setText("Ничья, начните \nновую игру");
                     });
                     break;
                 }
