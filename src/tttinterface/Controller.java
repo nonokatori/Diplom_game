@@ -2,6 +2,8 @@ package tttinterface;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,10 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.WindowEvent;
 import tttclogic.EnumGame;
 import tttclogic.Tic_Toe;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -42,6 +46,7 @@ public class Controller implements Initializable {
 
     private Tic_Toe ticToe = new Tic_Toe();
     private boolean end = false;
+    private Thread logicThread;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -49,7 +54,8 @@ public class Controller implements Initializable {
         btLevel.put(btMid, EnumGame.Type.MIDDLE);
         btLevel.put(btHard, EnumGame.Type.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-        createLogicThread();
+        logicThread = new Thread(new LogicThread(ticToe));
+        logicThread.start();
         update();
     }
 
@@ -100,7 +106,8 @@ public class Controller implements Initializable {
         newGame.setDisable(true);
         endGame.setDisable(true);
         paneTable.setVisible(false);
-        createLogicThread();
+        logicThread = new Thread(new LogicThread(ticToe));
+        logicThread.start();
         ticToe.initState();
         fstPlayer.setVisible(true);
         sndPlayer.setVisible(false);
@@ -157,11 +164,20 @@ public class Controller implements Initializable {
         }
     }
 
-    public void createLogicThread() {
-        Thread thread = new Thread(() -> {
+    public class LogicThread implements Runnable{
+
+        Tic_Toe ticToe;
+        public LogicThread(Tic_Toe ticToe) {
+            this.ticToe = ticToe;
+
+        }
+
+        @Override
+        public void run() {
             Enum flag;
             ticToe.initState();
             while (true) {
+
                 flag = ticToe.mainLogic();
 
                 if (EnumGame.State.WIN.equals(flag)) {
@@ -184,12 +200,22 @@ public class Controller implements Initializable {
                     Platform.runLater(() -> update());
                 }
 
-                if(end = true) {
-                    Thread.interrupted();
-                }
+                Thread.interrupted();
             }
-        });
-        thread.start();
+
+        }
+    }
+
+    private EventHandler<WindowEvent> close = new EventHandler<WindowEvent>() {
+        @Override
+        public void handle(WindowEvent windowEvent) {
+            System.out.println(Thread.currentThread().getName());
+            Thread.currentThread().interrupt();
+            Thread.
+        }
+    };
+    public EventHandler<WindowEvent> closeEventHandler() {
+        return close;
     }
 
 

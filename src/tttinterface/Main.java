@@ -16,6 +16,9 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
+        Controller controller = new Controller();
+        primaryStage.setOnCloseRequest(controller.closeEventHandler());
+
     }
 
     public static void main(String[] args) {
