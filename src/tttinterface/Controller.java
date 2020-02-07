@@ -2,23 +2,20 @@ package tttinterface;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
-import tttclogic.EnumGame;
-import tttclogic.Tic_Toe;
+import tttlogic.EnumGame;
+import tttlogic.Tic_Toe;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -33,13 +30,11 @@ public class Controller implements Initializable {
     @FXML
     public Text fstPlayer, sndPlayer, type, levelGame;
     @FXML
-    public Label going, congrat;
+    public Label going;
     @FXML
     public MenuItem newGame, endGame;
     @FXML
-    public ImageView image;
-    @FXML
-    public Pane paneImage, paneTable;
+    public Pane paneTable;
 
     public Button[] buttons;
     Map<Button, EnumGame.Type> btLevel = new HashMap<Button, EnumGame.Type>();
@@ -54,8 +49,7 @@ public class Controller implements Initializable {
         btLevel.put(btMid, EnumGame.Type.MIDDLE);
         btLevel.put(btHard, EnumGame.Type.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-        logicThread = new Thread(new LogicThread(ticToe));
-        logicThread.start();
+        methodThread();
         update();
     }
 
@@ -68,7 +62,6 @@ public class Controller implements Initializable {
     }
 
     void update() {
-
         int coun = 0;
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++){
@@ -77,7 +70,6 @@ public class Controller implements Initializable {
                 }
                 coun++;
             }
-
     }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
@@ -106,9 +98,7 @@ public class Controller implements Initializable {
         newGame.setDisable(true);
         endGame.setDisable(true);
         paneTable.setVisible(false);
-        logicThread = new Thread(new LogicThread(ticToe));
-        logicThread.start();
-        ticToe.initState();
+        methodThread();
         fstPlayer.setVisible(true);
         sndPlayer.setVisible(false);
     }
@@ -164,12 +154,17 @@ public class Controller implements Initializable {
         }
     }
 
+    public void methodThread() {
+        logicThread = new Thread(new LogicThread(ticToe));
+        logicThread.setDaemon(true);
+        logicThread.start();
+    }
+
     public class LogicThread implements Runnable{
 
         Tic_Toe ticToe;
         public LogicThread(Tic_Toe ticToe) {
             this.ticToe = ticToe;
-
         }
 
         @Override
@@ -177,9 +172,16 @@ public class Controller implements Initializable {
             Enum flag;
             ticToe.initState();
             while (true) {
+                if (ticToe.getPlayer2()==null) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 flag = ticToe.mainLogic();
-
+                System.out.println("qwqw");
                 if (EnumGame.State.WIN.equals(flag)) {
                     String player = ticToe.getLetter() == 'X' ? "крестики" :"нолики";
                     Platform.runLater(() -> {
@@ -196,22 +198,15 @@ public class Controller implements Initializable {
                     break;
                 }
 
-                if (EnumGame.State.SET.equals(flag)) {
-                    Platform.runLater(() -> update());
-                }
-
-                Thread.interrupted();
+                if (EnumGame.State.SET.equals(flag)) { Platform.runLater(() -> update());}
             }
-
         }
     }
 
     private EventHandler<WindowEvent> close = new EventHandler<WindowEvent>() {
         @Override
         public void handle(WindowEvent windowEvent) {
-            System.out.println(Thread.currentThread().getName());
-            Thread.currentThread().interrupt();
-            Thread.
+
         }
     };
     public EventHandler<WindowEvent> closeEventHandler() {

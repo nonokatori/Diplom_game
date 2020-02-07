@@ -1,4 +1,4 @@
-package tttclogic;
+package tttlogic;
 
 import javafx.scene.control.Button;
 

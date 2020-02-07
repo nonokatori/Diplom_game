@@ -1,4 +1,4 @@
-package tttclogic;
+package tttlogic;
 
 public enum EnumGame {
     ;

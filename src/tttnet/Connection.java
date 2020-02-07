@@ -1,6 +1,6 @@
 package tttnet;
 
-import tttclogic.ArraySync;
+import tttlogic.ArraySync;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
