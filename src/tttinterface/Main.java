@@ -9,6 +9,13 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
+    public void init() throws Exception {
+
+        System.out.println("Application inits");
+        super.init();
+    }
+
+    @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/scene.fxml"));
         primaryStage.setTitle("XO-game");

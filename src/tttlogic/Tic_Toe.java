@@ -24,7 +24,6 @@ public class Tic_Toe {
 
 
 
-    private volatile MessageArr messageArr;
     private Enum online;
     private NetServer server;
     private NetClient client;
@@ -75,6 +74,16 @@ public class Tic_Toe {
         char state = 'X';
         int i = 0,k = 0;
 
+        MessageArr messageArr = null;
+
+        while (enemyChar == 0 && myChar == 0) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (state == enemyChar) {
             try {
                 messageArr = client == null? client.read(): server.read();
@@ -95,7 +104,7 @@ public class Tic_Toe {
             }
             i= Character.getNumericValue(ID.charAt(0));
             k = Character.getNumericValue(ID.charAt(1));
-            messageArr.setCoord(new int[]{i, k});
+            messageArr.setCoord(i, k);
             try {
                 if (client == null) {
                     client.send(messageArr);
