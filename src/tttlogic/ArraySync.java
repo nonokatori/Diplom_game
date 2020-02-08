@@ -2,7 +2,7 @@ package tttlogic;
 
 import java.io.Serializable;
 
-public class ArraySync implements Serializable {
+public class ArraySync {
     private volatile char [][] arrField = new char[3][3];
     private boolean set = false;
 

@@ -9,4 +9,8 @@ public enum EnumGame {
     public enum Type {
         EASY, MIDDLE, HARD, USER
     }
+
+    public enum Online {
+        SERVER, CLIENT
+    }
 }

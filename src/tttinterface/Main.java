@@ -15,10 +15,6 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 241, 377));
         primaryStage.setResizable(false);
         primaryStage.show();
-
-        Controller controller = new Controller();
-        primaryStage.setOnCloseRequest(controller.closeEventHandler());
-
     }
 
     public static void main(String[] args) {

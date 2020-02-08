@@ -1,6 +1,12 @@
 package tttlogic;
 
 import javafx.scene.control.Button;
+import tttnet.MessageArr;
+import tttnet.NetClient;
+import tttnet.NetServer;
+
+import java.io.IOException;
+import java.util.Random;
 
 public class Tic_Toe {
 
@@ -8,11 +14,21 @@ public class Tic_Toe {
     private Enum player2;
     private char letter = 'X';
     private volatile String ID;
+    private char myChar;
+    private char enemyChar;
 
     private boolean winnerArrGor;
     private boolean winnerArrVer;
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
+
+
+
+    private volatile MessageArr messageArr;
+    private Enum online;
+    private NetServer server;
+    private NetClient client;
+
 
     ArraySync arraySync = new ArraySync();
     LevelAI easyLevel = new LevelAI(arraySync.getArrField());
@@ -55,6 +71,57 @@ public class Tic_Toe {
         this.ID = btn.getId().substring(3, 5);
     }
 
+    public Enum onlineLogic() {
+        char state = 'X';
+        int i = 0,k = 0;
+
+        if (state == enemyChar) {
+            try {
+                messageArr = client == null? client.read(): server.read();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            i = messageArr.getCoord()[0];
+            k = messageArr.getCoord()[1];
+        }
+
+        else if(state == myChar) {
+            while (ID == null) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            i= Character.getNumericValue(ID.charAt(0));
+            k = Character.getNumericValue(ID.charAt(1));
+            messageArr.setCoord(new int[]{i, k});
+            try {
+                if (client == null) {
+                    client.send(messageArr);
+                } else {
+                    server.send(messageArr);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        arraySync.setCoord(i,k, state);
+        Enum st = field(state); //может выдать ошибку в знаке
+        if(EnumGame.State.WIN.equals(st)) return EnumGame.State.WIN;
+        if (EnumGame.State.DRAW.equals(st)) return EnumGame.State.DRAW;
+        if (arraySync.isSet()) {
+            arraySync.setSet(false);
+            state = state == myChar ? enemyChar : myChar;
+            ID = ID != null? null: ID;
+            return EnumGame.State.SET;
+        }
+        return EnumGame.State.NOTHING;
+    }
+
     private void nextMove(Enum type) {
         int i = 0,k = 0;
         if (EnumGame.Type.USER.equals(type)) {
@@ -81,6 +148,29 @@ public class Tic_Toe {
         }
         arraySync.setCoord(i,k, letter);
 
+    }
+
+    public Enum getOnline() {
+        return online;
+    }
+    public void setOnline(Enum online) {
+        this.online = online;
+        if (EnumGame.Online.SERVER.equals(online)) {
+            server = new NetServer();
+            myChar = randomLetter();
+            enemyChar = myChar == 'X' ? 'O' : 'X';
+            NetServer.load(myChar);
+        }
+        else if(EnumGame.Online.CLIENT.equals(online)) {
+            client = new NetClient();
+            myChar = NetClient.load();
+        }
+    }
+
+    public char randomLetter() {
+        Random random = new Random();
+        int let = random.nextInt(2);
+        return let == 0? 'X' : 'O';
     }
 
     public Enum getPlayer1() {

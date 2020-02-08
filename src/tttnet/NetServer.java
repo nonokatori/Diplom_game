@@ -1,5 +1,6 @@
 package tttnet;
-import tttlogic.ArraySync;
+
+import tttnet.Connection;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,42 +13,32 @@ public class NetServer {
     public NetServer(int port){
         this.port = port;
     }
+    public NetServer() {}
 
-    public void start() throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(port)){
-            System.out.println("Server started...");
-            while (true){
-                Socket socket = serverSocket.accept();
-                connection = new Connection(socket);
-
-                connection.sendMessage(new ArraySync()); //что это может значить
-            }
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-    }
+    public void start(char c) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(port);
+        Socket socket = serverSocket.accept();
+        connection = new Connection(socket);
+        connection.fisrtSend(c);
+        System.out.println("Server started...");
     }
 
+    public void send(MessageArr message) throws IOException, ClassNotFoundException, InterruptedException {
+        connection.sendMessage(message);
+    }
 
-    public static void main(String[] args) {
+    public MessageArr read() throws IOException, ClassNotFoundException {
+        return connection.readMessage();
+    }
+
+    public static void load(char c) {
         int port = 8090;
         NetServer messageServer = new NetServer(port);
         try {
-            messageServer.start();
+            messageServer.start(c);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-}
-
-class ReaderThread implements Runnable {
-
-    private Connection connection;
-    private String port;
-
-    @Override
-    public void run() {
-
-//        Thread.
-    }
 }

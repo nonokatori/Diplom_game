@@ -18,15 +18,23 @@ public class Connection implements AutoCloseable {
         in = new ObjectInputStream(this.socket.getInputStream());
     }
 
-    public void sendMessage(ArraySync array) throws IOException {
-        out.writeObject(array);
+    public void sendMessage(MessageArr message) throws IOException {
+        out.writeObject(message);
         out.flush();
     }
 
-    public ArraySync readMessage() throws IOException, ClassNotFoundException {
-        return (ArraySync) in.readObject();
+    public void  fisrtSend(char letter) throws IOException {
+        out.writeChar(letter);
+        out.flush();
     }
 
+    public MessageArr readMessage() throws IOException, ClassNotFoundException {
+        return (MessageArr) in.readObject();
+    }
+
+    public char firstRead () throws IOException {
+        return in.readChar();
+    }
     @Override
     public void close() throws Exception {
         out.close();

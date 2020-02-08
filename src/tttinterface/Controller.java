@@ -22,11 +22,11 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     @FXML
-    public GridPane table, gpType, gpPlayer, gpLevel;
+    public GridPane table, gpType, gpPlayer, gpLevel, gpOnline;
     @FXML
     public Button btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22;
     @FXML
-    public Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff;
+    public Button btAI, btPlayer, btEasy, btMid, btHard, btOn, btOff, btServ, btClient;
     @FXML
     public Text fstPlayer, sndPlayer, type, levelGame;
     @FXML
@@ -42,6 +42,8 @@ public class Controller implements Initializable {
     private Tic_Toe ticToe = new Tic_Toe();
     private boolean end = false;
     private Thread logicThread;
+    private Thread onlineThread;
+    private Enum online;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -49,9 +51,25 @@ public class Controller implements Initializable {
         btLevel.put(btMid, EnumGame.Type.MIDDLE);
         btLevel.put(btHard, EnumGame.Type.HARD);
         buttons = new Button[]{btn00, btn01, btn02, btn10, btn11, btn12, btn20, btn21, btn22};
-        methodThread();
         update();
     }
+
+    public void clickedClient() {
+        paneTable.setVisible(true);
+        gpOnline.setVisible(false);
+        newGame.setDisable(false);
+        endGame.setDisable(false);
+        ticToe.setOnline(EnumGame.Online.CLIENT);
+    }
+
+    public void clickedServ() {
+        paneTable.setVisible(true);
+        gpOnline.setVisible(false);
+        newGame.setDisable(false);
+        endGame.setDisable(false);
+        ticToe.setOnline(EnumGame.Online.SERVER);
+    }
+
 
     private void initState() {
         for (Button bt : buttons) {
@@ -110,7 +128,7 @@ public class Controller implements Initializable {
     public void clickedBtOff(ActionEvent actionEvent) {
         gpType.setVisible(false);
         gpPlayer.setVisible(true);
-
+        methodThread();
     }
 
     public void clickedBtPlayer(ActionEvent actionEvent) {
@@ -130,9 +148,10 @@ public class Controller implements Initializable {
 
     public void clickedBtOn(ActionEvent actionEvent) {
         gpType.setVisible(false);
-        paneTable.setVisible(true);
-        newGame.setDisable(false);
-        endGame.setDisable(false);
+        gpOnline.setVisible(true);
+        onlineThread = new Thread(new OnlineThread(ticToe));
+        onlineThread.setDaemon(true);
+        onlineThread.start();
     }
 
     public void clickedButton(ActionEvent actionEvent) {
@@ -160,10 +179,10 @@ public class Controller implements Initializable {
         logicThread.start();
     }
 
-    public class LogicThread implements Runnable{
+    public class OnlineThread implements Runnable{
 
         Tic_Toe ticToe;
-        public LogicThread(Tic_Toe ticToe) {
+        public OnlineThread(Tic_Toe ticToe) {
             this.ticToe = ticToe;
         }
 
@@ -172,16 +191,17 @@ public class Controller implements Initializable {
             Enum flag;
             ticToe.initState();
             while (true) {
-                if (ticToe.getPlayer2()==null) {
+                while (ticToe.getOnline() == null) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                 }
 
-                flag = ticToe.mainLogic();
-                System.out.println("qwqw");
+                flag = ticToe.onlineLogic();
+
                 if (EnumGame.State.WIN.equals(flag)) {
                     String player = ticToe.getLetter() == 'X' ? "крестики" :"нолики";
                     Platform.runLater(() -> {
@@ -203,15 +223,47 @@ public class Controller implements Initializable {
         }
     }
 
-    private EventHandler<WindowEvent> close = new EventHandler<WindowEvent>() {
-        @Override
-        public void handle(WindowEvent windowEvent) {
 
+    public class LogicThread implements Runnable{
+
+        Tic_Toe ticToe;
+        public LogicThread(Tic_Toe ticToe) {
+            this.ticToe = ticToe;
         }
-    };
-    public EventHandler<WindowEvent> closeEventHandler() {
-        return close;
-    }
 
+        @Override
+        public void run() {
+            Enum flag;
+            ticToe.initState();
+            while (true) {
+                while (ticToe.getPlayer2()==null){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                flag = ticToe.mainLogic();
+                if (EnumGame.State.WIN.equals(flag)) {
+                    String player = ticToe.getLetter() == 'X' ? "крестики" :"нолики";
+                    Platform.runLater(() -> {
+                        update();
+                        going.setText("Победили " + player);
+                    });
+                    break;
+                }
+                if (EnumGame.State.DRAW.equals(flag)) {
+                    Platform.runLater(() -> {
+                        update();
+                        going.setText("Ничья, начните \nновую игру");
+                    });
+                    break;
+                }
+
+                if (EnumGame.State.SET.equals(flag)) { Platform.runLater(() -> update());}
+            }
+        }
+    }
 
 }

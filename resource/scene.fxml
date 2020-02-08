@@ -176,6 +176,21 @@
                       <Label fx:id="going" layoutX="4.0" layoutY="159.0" prefHeight="45.0" prefWidth="126.0" textAlignment="JUSTIFY" visible="true" />
                </children>
             </Pane>
+            <GridPane fx:id="gpOnline" layoutX="57.0" layoutY="108.0" prefHeight="122.0" prefWidth="126.0" visible="false">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="26.4" minHeight="10.0" prefHeight="15.199987792968749" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="45.60001220703124" minHeight="10.0" prefHeight="45.60001220703124" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Button fx:id="btServ" mnemonicParsing="false" onAction="#clickedServ" prefHeight="26.0" prefWidth="115.0" text="Создать игру" GridPane.rowIndex="3" />
+                  <Button fx:id="btClient" mnemonicParsing="false" onAction="#clickedClient" prefHeight="26.0" prefWidth="118.0" text="Присоединиться" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
             </children>
         </AnchorPane>
     </children>
