@@ -13,14 +13,21 @@ public class NetServer {
     public NetServer(int port){
         this.port = port;
     }
-    public NetServer() {}
 
-    public void start(char c) throws IOException {
+    public void start() throws IOException {
         ServerSocket serverSocket = new ServerSocket(port);
         Socket socket = serverSocket.accept();
         connection = new Connection(socket);
-        connection.fisrtSend(c);
+
         System.out.println("Server started...");
+    }
+
+    public void getLetter (char c) {
+        try {
+            connection.firstSend(c);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void send(MessageArr message) throws IOException, ClassNotFoundException, InterruptedException {
@@ -31,14 +38,15 @@ public class NetServer {
         return connection.readMessage();
     }
 
-    public static void load(char c) {
+    public static NetServer create() {
         int port = 8090;
         NetServer messageServer = new NetServer(port);
         try {
-            messageServer.start(c);
+            messageServer.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return messageServer;
     }
 
 }

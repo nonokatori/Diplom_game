@@ -69,8 +69,7 @@ public class Controller implements Initializable {
         endGame.setDisable(false);
         ticToe.setOnline(EnumGame.Online.SERVER);
     }
-
-
+    
     private void initState() {
         for (Button bt : buttons) {
             bt.setText("");
@@ -116,7 +115,6 @@ public class Controller implements Initializable {
         newGame.setDisable(true);
         endGame.setDisable(true);
         paneTable.setVisible(false);
-        methodThread();
         fstPlayer.setVisible(true);
         sndPlayer.setVisible(false);
     }

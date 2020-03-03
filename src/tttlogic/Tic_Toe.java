@@ -22,8 +22,6 @@ public class Tic_Toe {
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
 
-
-
     private Enum online;
     private NetServer server;
     private NetClient client;
@@ -86,7 +84,7 @@ public class Tic_Toe {
 
         if (state == enemyChar) {
             try {
-                messageArr = client == null? client.read(): server.read();
+                messageArr = client == null? server.read(): client.read();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -104,9 +102,9 @@ public class Tic_Toe {
             }
             i= Character.getNumericValue(ID.charAt(0));
             k = Character.getNumericValue(ID.charAt(1));
-            messageArr.setCoord(i, k);
+            messageArr = new MessageArr(new int[]{i, k});
             try {
-                if (client == null) {
+                if (client != null) {
                     client.send(messageArr);
                 } else {
                     server.send(messageArr);
@@ -119,7 +117,7 @@ public class Tic_Toe {
         }
 
         arraySync.setCoord(i,k, state);
-        Enum st = field(state); //может выдать ошибку в знаке
+        Enum st = field(state);
         if(EnumGame.State.WIN.equals(st)) return EnumGame.State.WIN;
         if (EnumGame.State.DRAW.equals(st)) return EnumGame.State.DRAW;
         if (arraySync.isSet()) {
@@ -162,43 +160,44 @@ public class Tic_Toe {
     public Enum getOnline() {
         return online;
     }
+
     public void setOnline(Enum online) {
         this.online = online;
         if (EnumGame.Online.SERVER.equals(online)) {
-            server = new NetServer();
-            myChar = randomLetter();
-            enemyChar = myChar == 'X' ? 'O' : 'X';
-            NetServer.load(myChar);
+            server = NetServer.create();
+            randomLetter();
+            server.getLetter(enemyChar);
         }
         else if(EnumGame.Online.CLIENT.equals(online)) {
-            client = new NetClient();
-            myChar = NetClient.load();
+            try {
+                client = NetClient.create();
+                myChar = client.setLetter();
+                enemyChar = myChar == 'X' ? 'O' : 'X';
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public char randomLetter() {
+    public void randomLetter() {
         Random random = new Random();
         int let = random.nextInt(2);
-        return let == 0? 'X' : 'O';
+        myChar = let == 0? 'X' : 'O';
+        enemyChar = myChar == 'X' ? 'O' : 'X';
     }
 
     public Enum getPlayer1() {
         return player1;
     }
-
     public void setPlayer1(Enum player1) {
         this.player1 = player1;
     }
-
     public void setPlayer2(Enum player2) {
         this.player2 = player2;
     }
-
-
     public char getLetter() {
         return letter;
     }
-
     public Enum getPlayer2() {
         return player2;
     }

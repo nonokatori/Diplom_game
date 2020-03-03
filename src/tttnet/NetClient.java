@@ -19,11 +19,12 @@ public class NetClient {
         this.port = port;
     }
 
-    public NetClient() {}
-
-    public char start() throws IOException {
+    public void start() throws IOException {
         connection = new Connection(new Socket(server, port));
-        return connection.firstRead();
+    }
+
+    public char setLetter () throws IOException {
+         return connection.firstRead();
     }
 
     public void send(MessageArr message) throws IOException, ClassNotFoundException, InterruptedException {
@@ -34,9 +35,8 @@ public class NetClient {
         return connection.readMessage();
     }
 
-
-    public static char load() {
-        char let = 0;
+    public static NetClient create() {
+        NetClient messageClient = null;
         try (InputStream inputStream = NetClient.class.getClassLoader().getResourceAsStream("config.properties")){
 
             Properties properties = new Properties();
@@ -45,11 +45,11 @@ public class NetClient {
             String server = properties.getProperty("server");
             int port = Integer.parseInt(properties.getProperty("port"));
             System.out.println(server);
-            NetClient messageClient = new NetClient(server, port);
-            let = messageClient.start();
+            messageClient = new NetClient(server, port);
+            messageClient.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return let;
+        return messageClient;
     }
 }

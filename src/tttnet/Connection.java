@@ -23,7 +23,7 @@ public class Connection implements AutoCloseable {
         out.flush();
     }
 
-    public void  fisrtSend(char letter) throws IOException {
+    public void  firstSend(char letter) throws IOException {
         out.writeChar(letter);
         out.flush();
     }
