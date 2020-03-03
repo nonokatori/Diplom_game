@@ -24,7 +24,17 @@ public class NetClient {
     }
 
     public char setLetter () throws IOException {
-         return connection.firstRead();
+        char c = 0;
+        while (true) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            c = connection.firstRead();
+            if(c !='O' || c != 'X') break;
+        }
+        return c;
     }
 
     public void send(MessageArr message) throws IOException, ClassNotFoundException, InterruptedException {

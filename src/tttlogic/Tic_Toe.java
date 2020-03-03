@@ -13,6 +13,7 @@ public class Tic_Toe {
     private Enum player1;
     private Enum player2;
     private char letter = 'X';
+    private char state = 'X';
     private volatile String ID;
     private char myChar;
     private char enemyChar;
@@ -25,6 +26,8 @@ public class Tic_Toe {
     private Enum online;
     private NetServer server;
     private NetClient client;
+    private boolean waitStart = false;
+    private MessageArr messageArr;
 
 
     ArraySync arraySync = new ArraySync();
@@ -69,10 +72,10 @@ public class Tic_Toe {
     }
 
     public Enum onlineLogic() {
-        char state = 'X';
+
         int i = 0,k = 0;
 
-        MessageArr messageArr = null;
+//        MessageArr messageArr = null;
 
         while (enemyChar == 0 && myChar == 0) {
             try {
@@ -157,26 +160,30 @@ public class Tic_Toe {
 
     }
 
-    public Enum getOnline() {
-        return online;
-    }
-
     public void setOnline(Enum online) {
-        this.online = online;
+//        this.online = online;
         if (EnumGame.Online.SERVER.equals(online)) {
-            server = NetServer.create();
             randomLetter();
-            server.getLetter(enemyChar);
+
+            server = NetServer.create(enemyChar);
         }
         else if(EnumGame.Online.CLIENT.equals(online)) {
             try {
                 client = NetClient.create();
+                while (myChar == 0) {
+                    Thread.sleep(200);
+                }
                 myChar = client.setLetter();
                 enemyChar = myChar == 'X' ? 'O' : 'X';
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        waitStart = true;
+    }
+
+    public boolean isWaitStart () {
+        return waitStart;
     }
 
     public void randomLetter() {

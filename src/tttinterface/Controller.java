@@ -189,12 +189,13 @@ public class Controller implements Initializable {
             Enum flag;
             ticToe.initState();
             while (true) {
-                while (ticToe.getOnline() == null) {
+                while (true) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    if(ticToe.isWaitStart()==true) break;
 
                 }
 
