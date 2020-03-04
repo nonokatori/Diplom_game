@@ -1,13 +1,9 @@
 package tttnet;
 
-import tttlogic.ArraySync;
-import tttlogic.Tic_Toe;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class NetClient {
     private String server;
@@ -19,12 +15,19 @@ public class NetClient {
         this.port = port;
     }
 
-    public void start() throws IOException {
-        connection = new Connection(new Socket(server, port));
+    public void start() {
+        while (true) {
+            try {
+                connection = new Connection( new Socket(server, port));
+                break;
+            } catch (IOException e){
+                System.out.println("Ожидание сервера");
+            }
+        }
     }
 
     public char setLetter () throws IOException {
-        char c = 0;
+        char c;
         while (true) {
             try {
                 Thread.sleep(200);
@@ -37,7 +40,7 @@ public class NetClient {
         return c;
     }
 
-    public void send(MessageArr message) throws IOException, ClassNotFoundException, InterruptedException {
+    public void send(MessageArr message) throws IOException {
         connection.sendMessage(message);
     }
 
@@ -48,10 +51,8 @@ public class NetClient {
     public static NetClient create() {
         NetClient messageClient = null;
         try (InputStream inputStream = NetClient.class.getClassLoader().getResourceAsStream("config.properties")){
-
             Properties properties = new Properties();
             properties.load(inputStream);
-
             String server = properties.getProperty("server");
             int port = Integer.parseInt(properties.getProperty("port"));
             System.out.println(server);

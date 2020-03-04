@@ -9,16 +9,17 @@ import java.net.Socket;
 public class NetServer {
     private int port;
     private Connection connection;
+    private ServerSocket serverSocket;
 
     public NetServer(int port){
         this.port = port;
     }
 
-    public void start(char c) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        Socket socket = serverSocket.accept();
-        connection = new Connection(socket);
+    public void start(char c) {
         try {
+            serverSocket = new ServerSocket(port);
+            Socket socket = serverSocket.accept();
+            connection = new Connection(socket);
             connection.firstSend(c);
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,10 +27,11 @@ public class NetServer {
         System.out.println("Server started...");
     }
 
-    public void getLetter (char c) {
+    public void close () {
         try {
-            connection.firstSend(c);
-        } catch (IOException e) {
+            serverSocket.close();
+            connection.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -45,11 +47,7 @@ public class NetServer {
     public static NetServer create(char c) {
         int port = 8090;
         NetServer messageServer = new NetServer(port);
-        try {
-            messageServer.start(c);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        messageServer.start(c);
         return messageServer;
     }
 

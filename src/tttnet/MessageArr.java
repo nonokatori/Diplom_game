@@ -16,10 +16,10 @@ public class MessageArr implements Serializable {
         return coord;
     }
 
-    public void setCoord(int k, int j) {
-        coord[0] = k;
-        coord[1] = j;
-    }
+//    public void setCoord(int k, int j) {
+//        coord[0] = k;
+//        coord[1] = j;
+//    }
 
     @Override
     public String toString() {
