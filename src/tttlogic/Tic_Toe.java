@@ -3,12 +3,10 @@ package tttlogic;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import tttnet.MessageArr;
-import tttnet.NetClient;
-import tttnet.NetServer;
 
 import javafx.scene.control.Button;
-import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Tic_Toe {
 
@@ -23,10 +21,6 @@ public class Tic_Toe {
     private boolean winnerArrVer;
     private boolean winnerArrDiagPl;
     private boolean winnerArrDiagMin;
-
-    private NetServer server;
-    private NetClient client;
-    private boolean waitStart = false;
 
     private Button [] buttons = new Button[9];
     private Label going;
@@ -56,27 +50,23 @@ public class Tic_Toe {
 
     public Enum resultLogic () {
         Enum st = field(letter);
+        AtomicReference<String> result = new AtomicReference<>();
         if(EnumGame.State.WIN.equals(st))  {
-            String player = getLetter() == 'X' ? "крестики" :"нолики";
-            Platform.runLater(() -> {
-                update();
-                going.setText("Победили " + player);
-            });
-            return EnumGame.State.WIN;
+            result.set("Победили " + (getLetter() == 'X' ? "крестики" : "нолики"));
         }
-        if (EnumGame.State.DRAW.equals(st)) {
-            Platform.runLater(() -> {
-                update();
-                going.setText("Ничья, начните \nновую игру");
-            });
-            return EnumGame.State.DRAW;
+        else if (EnumGame.State.DRAW.equals(st)) {
+            result.set("Ничья, начните \nновую игру");
         }
         if (arraySync.isSet()) {
             arraySync.setSet(false);
             letter = letter == myChar ? enemyChar : myChar;
+            result.set(letter == myChar ? "Ваш ход" : "Ход оппонента");
             ID = ID != null ? null : ID;
-            Platform.runLater(() -> update());
         }
+        Platform.runLater(() -> {
+            update();
+            going.setText(String.valueOf(result));
+        });
         return EnumGame.State.NOTHING;
     }
 
@@ -92,24 +82,8 @@ public class Tic_Toe {
 
     public void clicked(Button btn) {
         this.ID = btn.getId().substring(3, 5);
+        System.out.println(ID);
     }
-
-//    public MessageArr onlineLogic() {
-//
-//        int i = 0,k = 0;
-//
-////        MessageArr messageArr = null;
-//
-////        while (enemyChar == 0 && myChar == 0) {
-////            try {
-////                Thread.sleep(1000);
-////            } catch (InterruptedException e) {
-////                e.printStackTrace();
-////            }
-////        }
-//        arraySync.setCoord(i,k, letter);
-//        return messageArr;
-//    }
 
     private void nextMove(Enum type) {
         int i = 0,k = 0;
@@ -139,27 +113,10 @@ public class Tic_Toe {
 
     }
 
-    public void setOnline(Enum online) {
-        if (EnumGame.Online.SERVER.equals(online)) {
-            randomLetter();
-            server = NetServer.create(enemyChar);
-        }
-        else if(EnumGame.Online.CLIENT.equals(online)) {
-            try {
-                client = NetClient.create();
-                myChar = client.setLetter();
-                enemyChar = myChar == 'X' ? 'O' : 'X';
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        waitStart = true;
-    }
-
     public char randomLetter() {
         Random random = new Random();
         int let = random.nextInt(2);
-        myChar = /*let == 0? 'X' : */'O';
+        myChar = /*let == 0? 'X' : */'X';
         enemyChar = myChar == 'X' ? 'O' : 'X';
         return enemyChar;
     }
@@ -208,18 +165,20 @@ public class Tic_Toe {
     public MessageArr getMessageArr() {
         while (ID == null) {
             try {
-                Thread.sleep(250);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        messageArr = new MessageArr(new int[]{Character.getNumericValue(ID.charAt(0)),
-                Character.getNumericValue(ID.charAt(1))});
+
+        int [] coord = {Character.getNumericValue(ID.charAt(0)),
+                Character.getNumericValue(ID.charAt(1))};
+        messageArr = new MessageArr(coord);
+        arraySync.setCoord(coord[0],coord[1],myChar);
         return messageArr;
     }
 
     public void setMessageArr(MessageArr messageArr) {
-//        this.messageArr = messageArr;
         arraySync.setCoord( messageArr.getCoord()[0], messageArr.getCoord()[1], letter);
     }
 
@@ -227,9 +186,9 @@ public class Tic_Toe {
         int coun = 0;
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++){
-                if(!buttons[coun].getText().equals(getArrField()[i][j])) {
-                    buttons[coun].setText(Character.toString(getArrField()[i][j]));
-                }
+                buttons[coun].setText(Character.toString(getArrField()[i][j]));
+                buttons[coun].setDisable(buttons[coun].getText().equals("X")
+                        || buttons[coun].getText().equals("O"));
                 coun++;
             }
     }

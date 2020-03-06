@@ -43,7 +43,6 @@ public class Controller implements Initializable {
 
     private Tic_Toe ticToe = new Tic_Toe();
     private Thread logicThread;
-//    private Thread onlineThread;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,7 +59,6 @@ public class Controller implements Initializable {
         gpOnline.setVisible(false);
         newGame.setDisable(false);
         endGame.setDisable(false);
-//        ticToe.setOnline(EnumGame.Online.CLIENT);
         Thread clientThread = new Thread(new ClientThread(ticToe));
         clientThread.setDaemon(true);
         clientThread.start();
@@ -71,7 +69,6 @@ public class Controller implements Initializable {
         gpOnline.setVisible(false);
         newGame.setDisable(false);
         endGame.setDisable(false);
-//        ticToe.setOnline(EnumGame.Online.SERVER);
         Thread serverThread = new Thread(new ServerThread(ticToe));
         serverThread.setDaemon(true);
         serverThread.start();
@@ -84,17 +81,6 @@ public class Controller implements Initializable {
         }
         going.setText("");
     }
-
-//    void update() {
-//        int coun = 0;
-//        for (int i = 0; i < 3; i++)
-//            for (int j = 0; j < 3; j++){
-//                if(!buttons[coun].getText().equals(ticToe.getArrField()[i][j])) {
-//                    buttons[coun].setText(Character.toString(ticToe.getArrField()[i][j]));
-//                }
-//                coun++;
-//            }
-//    }
 
     public void clickedBtLvl(ActionEvent actionEvent) {
         Enum type = null;
@@ -185,126 +171,103 @@ public class Controller implements Initializable {
     public class ServerThread implements Runnable {
 
         Tic_Toe tic_toe;
+
         public ServerThread(Tic_Toe ticToe) {
             this.tic_toe = ticToe;
         }
 
-
         @Override
         public void run() {
-            NetServer server = NetServer.create(tic_toe.randomLetter());
             Enum flag;
-            while (true) {
-                try {
-                    if (tic_toe.getLetter() == tic_toe.getMyChar()) {
-                        MessageArr messageArr = tic_toe.getMessageArr();
-                        server.send(messageArr);
-                    } else if (tic_toe.getLetter() == tic_toe.getEnemyChar()) {
+            MessageArr messageArr = null;
+            ticToe.initState();
+            System.out.println("run");
+            NetServer server = NetServer.create(tic_toe.randomLetter());
 
-                        MessageArr messageArr = server.read();
-                        tic_toe.setMessageArr(messageArr);
+            Platform.runLater(()-> going.setText("Вы играете за " + tic_toe.getMyChar() + " :)"));
+            while (true) {
+                System.out.println("я жив");
+                if (tic_toe.getLetter() == tic_toe.getMyChar()) {
+                    messageArr = tic_toe.getMessageArr();
+                    System.out.println(messageArr.toString());
+
+                    try {
+                        server.send(messageArr);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        server.close();
                     }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                } else if (tic_toe.getLetter() == tic_toe.getEnemyChar()) {
+                    try {
+                        messageArr = server.read();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    tic_toe.setMessageArr(messageArr);
                 }
+
                 flag = tic_toe.resultLogic();
                 if (!EnumGame.State.NOTHING.equals(flag)) {
                     break;
                 }
             }
-
-//            server.close();
-
+            server.close();
         }
+
     }
 
     public class ClientThread implements Runnable {
 
         Tic_Toe tic_toe;
-
         public ClientThread(Tic_Toe ticToe) {
             this.tic_toe = ticToe;
         }
 
         @Override
         public void run() {
-            NetClient client = NetClient.create();
             Enum flag;
+            MessageArr messageArr = null;
+            ticToe.initState();
+            NetClient client = NetClient.create();
             try {
                 tic_toe.setMyChar(client.setLetter());
+                Platform.runLater(()-> going.setText("Вы играете за " + tic_toe.getMyChar() + " :)" ));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             while (true) {
-
-                try {
-                    if (tic_toe.getLetter() == tic_toe.getMyChar()) {
-                        client.send(tic_toe.getMessageArr());
-                    } else if (tic_toe.getLetter() == tic_toe.getEnemyChar()) {
-                        tic_toe.setMessageArr(client.read());
+                System.out.println("я жив");
+                if (tic_toe.getLetter() == tic_toe.getMyChar()) {
+                    messageArr = tic_toe.getMessageArr();
+                    System.out.println(messageArr.toString());
+                    try {
+                        client.send(messageArr);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        client.close();
                     }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                } else if (tic_toe.getLetter() == tic_toe.getEnemyChar()) {
+                    try {
+                        messageArr = client.read();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    tic_toe.setMessageArr(messageArr);
                 }
+
                 flag = tic_toe.resultLogic();
                 if (!EnumGame.State.NOTHING.equals(flag)) {
                     break;
                 }
             }
-
+            client.close();
         }
+
     }
-
-//    public class OnlineThread implements Runnable{
-//
-//        Tic_Toe ticToe;
-//        public OnlineThread(Tic_Toe ticToe) {
-//            this.ticToe = ticToe;
-//        }
-//
-//        @Override
-//        public void run() {
-//            Enum flag;
-//            ticToe.initState();
-//            while (true) {
-////                while (true) {
-////                    try {
-////                        Thread.sleep(500);
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-////                    if(ticToe.isWaitStart()==true) break;
-////
-////                }
-//
-////                flag = ticToe.onlineLogic();
-////
-////                if (EnumGame.State.WIN.equals(flag)) {
-////                    String player = ticToe.getLetter() == 'X' ? "крестики" :"нолики";
-////                    Platform.runLater(() -> {
-////                        update();
-////                        going.setText("Победили " + player);
-////                    });
-////                    break;
-////                }
-////                if (EnumGame.State.DRAW.equals(flag)) {
-////                    Platform.runLater(() -> {
-////                        update();
-////                        going.setText("Ничья, начните \nновую игру");
-////                    });
-////                    break;
-////                }
-////
-////                if (EnumGame.State.SET.equals(flag)) { Platform.runLater(() -> update());}
-//            }
-//        }
-//    }
-
 
     public class LogicThread implements Runnable {
 
         Tic_Toe ticToe;
-
         public LogicThread(Tic_Toe ticToe) {
             this.ticToe = ticToe;
         }

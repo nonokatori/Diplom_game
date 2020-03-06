@@ -9,6 +9,7 @@ public class NetClient {
     private String server;
     private int port;
     private Connection connection;
+    private Socket socket;
 
     public NetClient(String server, int port) {
         this.server = server;
@@ -18,7 +19,8 @@ public class NetClient {
     public void start() {
         while (true) {
             try {
-                connection = new Connection( new Socket(server, port));
+                socket = new Socket(server, port);
+                connection = new Connection(socket);
                 break;
             } catch (IOException e){
                 System.out.println("Ожидание сервера");
@@ -62,5 +64,16 @@ public class NetClient {
             e.printStackTrace();
         }
         return messageClient;
+    }
+
+    public void close() {
+        try {
+            connection.close();
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Socket closed");
     }
 }

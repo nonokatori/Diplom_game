@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class MessageArr implements Serializable {
-    private volatile boolean waitFlag = true;
     private volatile int [] coord = new int[2];
+    private static final long serialVersionUID = 5506756117605352206L;
 
     public MessageArr(int[] coord) {
         this.coord = coord;
@@ -24,8 +24,7 @@ public class MessageArr implements Serializable {
     @Override
     public String toString() {
         return "MessageArr{" +
-                "waitFlag=" + waitFlag +
-                ", coord=" + Arrays.toString(coord) +
+                "coord=" + Arrays.toString(coord) +
                 '}';
     }
 }

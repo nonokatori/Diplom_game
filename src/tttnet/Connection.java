@@ -26,6 +26,7 @@ public class Connection implements AutoCloseable {
     public void  firstSend(char letter) throws IOException {
         out.writeChar(letter);
         out.flush();
+        System.out.println("send1");
     }
 
     public MessageArr readMessage() throws IOException, ClassNotFoundException {

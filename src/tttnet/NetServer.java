@@ -17,6 +17,7 @@ public class NetServer {
 
     public void start(char c) {
         try {
+            System.out.println("create");
             serverSocket = new ServerSocket(port);
             Socket socket = serverSocket.accept();
             connection = new Connection(socket);
@@ -34,6 +35,7 @@ public class NetServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Server closed");
     }
 
     public void send(MessageArr message) throws IOException {
@@ -46,9 +48,11 @@ public class NetServer {
 
     public static NetServer create(char c) {
         int port = 8090;
+
+        System.out.println("create");
         NetServer messageServer = new NetServer(port);
+        System.out.println("start");
         messageServer.start(c);
         return messageServer;
     }
-
 }
